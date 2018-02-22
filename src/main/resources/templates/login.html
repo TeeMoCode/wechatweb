@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <link  href="/css/weui.min.css" rel="stylesheet">
+    <link  href="/css/jquery-weui.min.css" rel="stylesheet">
+    <link  href="/css/master.css" rel="stylesheet">
+</head>
+<body ontouchstart>
+<div id="header" class="top-back">
+    <span class="top-bar-title">个人中心</span>
+</div>
+<div class="logo">
+</div>
+<form method="post" action="" autocomplete="off" >
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><label class="weui-label"><img src="/img/phone.png" style="height: 1.5rem;width: 1.5rem"></label></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" name="username"  placeholder="请输入手机号">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <label class="weui-label"><img src="/img/password.png" style="height: 1.5rem;width: 1.5rem"></label>
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="password" name="password" placeholder="请输入密码" >
+            </div>
+        </div>
+    </div>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <div class="weui-btn-area">
+        <input type="submit" value="登录" class="weui-btn weui-btn_primary">
+    </div>
+    <div style="text-align: center;">
+        <a href="/register" style="font-size:0.8rem;color:rgb(2, 151, 255); ">注册帐号</a>
+    </div>
+
+</form>
+
+
+<!-- body 最后 -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery-weui.min.js"></script>
+</body>
+</html>

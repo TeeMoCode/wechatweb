@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <link  href="/css/weui.min.css" rel="stylesheet">
+    <link  href="/css/jquery-weui.min.css" rel="stylesheet">
+    <link  href="/css/master.css" rel="stylesheet">
+</head>
+<body ontouchstart>
+<div id="header" class="top-back">
+    <span class="top-bar-title">注册</span>
+</div>
+<div class="logo">
+</div>
+<form method="post" action="/" autocomplete="off" id="registerForm">
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><img src="/img/phone.png" style="height: 1.5rem;width: 1.5rem"></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" name="username"  id="username" placeholder="请输入手机号">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <img src="/img/password.png" style="height: 1.5rem;width: 1.5rem">
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="password" name="password" id="password" placeholder="请输入密码" >
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+              <img src="/img/verifycode.png" style="height: 1.5rem;width: 1.5rem">
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" name="checkCode" id="checkCode" placeholder="请输入图形验证码" >
+            </div>
+            <div class="weui-cell__ft">
+                <img class="weui-vcode-img" src="/CodeController/getCheckCode"  title="点击更换验证码" id="checkCodeImg">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+                <img src="/img/smscode.png" style="height: 1.5rem;width: 1.5rem">
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" name="smsCode" id="smsCode" placeholder="请输入短信验证码" >
+            </div>
+            <div class="weui-cell__ft">
+                    <a href="/CodeController/getSmsCode" style="font-size:0.8rem;color:rgb(2, 151, 255);">获取手机验证码</a>
+            </div>
+        </div>
+    </div>
+        <input type="hidden"  th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <input type="button" value="注册"  id="submitButton" class="weui-btn weui-btn_primary">
+    </div>
+</form>
+
+<!-- body 最后 -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery-weui.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    $(function () {
+        var tokenVal = [[${_csrf.token}]];
+        $("#submitButton").click(function () {
+            var canSubmit = true;
+            if(!$("#username").val()){
+                $.toast("手机号码不能为空", "text")
+                canSubmit = false
+            }else if(!$("#password").val()){
+                $.toast("密码不能为空", "text")
+                canSubmit = false
+            }else if(!$("#checkCode").val()){
+                $.toast("图形验证码不能为空", "text")
+                canSubmit = false
+            }else if(!$("#smsCode").val()){
+                $.toast("短信验证码不能为空", "text")
+                canSubmit = false
+            }
+            if(canSubmit){
+                $("#registerForm").submit()
+            }
+        })
+        //    验证码图片点击后,获得新的验证码
+        $("#checkCodeImg").click(function () {
+            $("#checkCodeImg").attr("src","/CodeController/getCheckCode?"+new Date().getTime());
+        })
+        $("#checkCode").blur(function () {
+            var checkCodeValue = $("#checkCode").val();
+            if(checkCodeValue){
+                $.ajax({
+                    url:"/CodeController/verifyCheckCode",
+                    method:"post",
+                    headers :{"X-CSRF-TOKEN":tokenVal},
+                    data : {"checkCode" :checkCodeValue},
+                    success:function(data){
+                        if (data.code ='0001'){
+                            $.toast(data.error, "text")
+                        }
+                    }
+
+                })
+            }
+        })
+        $("#username").blur(function () {
+            $.ajax({
+                url:"/"
+
+            })
+        })
+
+    })
+</script>
+</body>
+</html>

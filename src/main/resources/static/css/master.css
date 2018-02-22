@@ -1,0 +1,30 @@
+.group-title {
+    color: #cc2c2c;
+    border-top: 1px solid #cc2c2c;
+    padding: 2px 0px 2px 0px;
+    font-size: 16px;
+}
+
+.padding {
+    padding: 2px 15px 0px 15px;
+}
+
+.top-back {
+    top: 0;
+    width: 100%;
+    display: flex;
+}
+
+.top-bar-title {
+    font-weight: bold;
+    font-size: 18px;
+    color: #fff;
+    line-height: 45px;
+    width: 100%;
+    text-align: center;
+    background-color: #cc2c2c
+}
+.logo{
+    height: 4.2rem;
+    background: url(/img/logo.png) 50% center / 7.3rem no-repeat;
+}

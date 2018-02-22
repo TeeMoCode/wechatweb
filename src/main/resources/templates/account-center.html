@@ -1,0 +1,82 @@
+<!DOCTYPE html  >
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>个人中心</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <link  href="/css/weui.min.css" rel="stylesheet">
+    <link  href="/css/jquery-weui.min.css" rel="stylesheet">
+    <link  href="/css/master.css" rel="stylesheet">
+</head>
+<body ontouchstart>
+
+        <div id="header" class="top-back">
+            <span class="top-bar-title">个人中心</span>
+        </div>
+        <div class="weui-panel weui-panel_access">
+            <div class="weui-panel__hd">
+                <a href="/account-manager" class="weui-cell weui-cell_access weui-cell_link">
+                    <div class="weui-cell__hd"> <img src="/img/people.png" style="height: 2rem;width: 2rem">   </div>
+                    <div class="weui-cell__bd">
+                        <p style="text-align: center;color:#000000;">188****1234 </p>
+                    </div>
+                    <span class="weui-cell__ft">
+                         <span style="color:#D3D3D3;">账号管理</span>
+                    </span>
+                </a>
+            </div>
+            <div class="weui-panel__bd">
+                <div class="weui-media-box weui-media-box_small-appmsg">
+                    <div class="weui-cells">
+                        <div  class="padding">
+                            <div  class="group-title">
+                                贷款
+                            </div>
+                        </div>
+                        <a class="weui-cell weui-cell_access" href="/loan-application">
+                            <div class="weui-cell__hd"><img src="/img/table.png" alt="" style="width: 1.2rem;margin-right:5px;display:block"></div>
+                            <div class="weui-cell__bd weui-cell_primary">
+                                <p>贷款申请</p>
+                            </div>
+                            <span class="weui-cell__ft"></span>
+                        </a>
+                        <a class="weui-cell weui-cell_access" href="/loan-history">
+                            <div class="weui-cell__hd"><img src="/img/clock.png" alt="" style="width:1.2rem;margin-right:5px;display:block"></div>
+                            <div class="weui-cell__bd weui-cell_primary">
+                                <p>我的贷款</p>
+                            </div>
+                            <span class="weui-cell__ft"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="weui-panel__ft">
+            </div>
+        </div>
+
+        <div class="weui-tabbar">
+            <a href="/loan-application" class="weui-tabbar__item">
+                <div class="weui-tabbar__icon">
+                    <img src="/img/clock.png" alt="">
+                </div>
+                <p class="weui-tabbar__label">贷款申请</p>
+            </a>
+            <a href="/loan-history" class="weui-tabbar__item">
+                <div class="weui-tabbar__icon">
+                    <img src="/img/table.png" alt="">
+                </div>
+                <p class="weui-tabbar__label">我的贷款</p>
+            </a>
+            <a href="/account-center" class="weui-tabbar__item">
+                <div class="weui-tabbar__icon">
+                    <img src="/img/people.png" alt="">
+                </div>
+                <p class="weui-tabbar__label">个人中心</p>
+            </a>
+        </div>
+
+<!-- body 最后 -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery-weui.min.js"></script>
+</body>
+</html>
