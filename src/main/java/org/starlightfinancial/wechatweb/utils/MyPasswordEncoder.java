@@ -2,9 +2,7 @@ package org.starlightfinancial.wechatweb.utils;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-/**
- * Created by senlin.deng on 2017-12-11.
- */
+
 public class MyPasswordEncoder implements PasswordEncoder {
 
     @Override
