@@ -14,20 +14,12 @@
 </div>
 <div class="logo">
 </div>
-<form method="post" action="/" autocomplete="off" id="registerForm">
+<form method="post" action="/code/verifySmsCode" autocomplete="off" id="registerForm">
     <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
             <div class="weui-cell__hd"><img src="/img/phone.png" style="height: 1.5rem;width: 1.5rem"></div>
             <div class="weui-cell__bd">
-                <input class="weui-input" type="text" name="username"  id="username" placeholder="请输入手机号">
-            </div>
-        </div>
-        <div class="weui-cell">
-            <div class="weui-cell__hd">
-                <img src="/img/password.png" style="height: 1.5rem;width: 1.5rem">
-            </div>
-            <div class="weui-cell__bd">
-                <input class="weui-input" type="password" name="password" id="password" placeholder="请输入密码" >
+                <input class="weui-input" type="text" name="mobile"  id="mobile" placeholder="请输入手机号">
             </div>
         </div>
         <div class="weui-cell">
@@ -38,7 +30,7 @@
                 <input class="weui-input" type="text" name="checkCode" id="checkCode" placeholder="请输入图形验证码" >
             </div>
             <div class="weui-cell__ft">
-                <img class="weui-vcode-img" src="/CodeController/getCheckCode"  title="点击更换验证码" id="checkCodeImg">
+                <img class="weui-vcode-img" src="/code/getCheckCode"  title="点击更换验证码" id="checkCodeImg">
             </div>
         </div>
         <div class="weui-cell">
@@ -48,13 +40,12 @@
             <div class="weui-cell__bd">
                 <input class="weui-input" type="text" name="smsCode" id="smsCode" placeholder="请输入短信验证码" >
             </div>
-            <div class="weui-cell__ft">
-                    <a href="/CodeController/getSmsCode" style="font-size:0.8rem;color:rgb(2, 151, 255);">获取手机验证码</a>
+            <div class="weui-cell__ft" >
+                <input type="button" value="获取手机验证码" id="smsCodeButton" class="weui-btn weui-btn_primary" disabled>
             </div>
         </div>
     </div>
-        <input type="hidden"  th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-        <input type="button" value="注册"  id="submitButton" class="weui-btn weui-btn_primary">
+        <input type="button" value="提交"  id="submitButton" class="weui-btn weui-btn_primary">
     </div>
 </form>
 
@@ -66,11 +57,8 @@
         var tokenVal = [[${_csrf.token}]];
         $("#submitButton").click(function () {
             var canSubmit = true;
-            if(!$("#username").val()){
+            if(!$("#mobile").val()){
                 $.toast("手机号码不能为空", "text")
-                canSubmit = false
-            }else if(!$("#password").val()){
-                $.toast("密码不能为空", "text")
                 canSubmit = false
             }else if(!$("#checkCode").val()){
                 $.toast("图形验证码不能为空", "text")
@@ -80,35 +68,85 @@
                 canSubmit = false
             }
             if(canSubmit){
-                $("#registerForm").submit()
+                $.ajax({
+                    url:"/code/verifyCheckCode",
+                    method:"post",
+                    headers :{"X-CSRF-TOKEN":tokenVal},
+                    data : $("#registerForm").serialize(),
+                    success:function(data){
+                        if (data.code =='0001'){
+                            $.toast(data.message, "text")
+                        }else if (data.code =='0000'){
+                            window.location.href='/register-detail?mobile='+$("#mobile").val()
+                        }
+                    }
+                })
+                $("#registerForm").submit();
             }
         })
         //    验证码图片点击后,获得新的验证码
         $("#checkCodeImg").click(function () {
-            $("#checkCodeImg").attr("src","/CodeController/getCheckCode?"+new Date().getTime());
+            $("#checkCodeImg").attr("src","/code/getCheckCode?"+new Date().getTime());
         })
         $("#checkCode").blur(function () {
             var checkCodeValue = $("#checkCode").val();
+            $("#smsCodeButton").removeAttr("disabled");
             if(checkCodeValue){
                 $.ajax({
-                    url:"/CodeController/verifyCheckCode",
+                    url:"/code/verifyCheckCode",
                     method:"post",
                     headers :{"X-CSRF-TOKEN":tokenVal},
                     data : {"checkCode" :checkCodeValue},
                     success:function(data){
-                        if (data.code ='0001'){
-                            $.toast(data.error, "text")
+                        if (data.code =='0001'){
+                            $.toast(data.message, "text")
+                            $("#smsCodeButton").attr("disabled",true)
+                        }
+                    }
+                })
+            }
+        })
+
+        $("#smsCodeButton").click(function () {
+            $.ajax({
+                url:"/code/getSmsCode",
+                method:"post",
+                headers :{"X-CSRF-TOKEN":tokenVal},
+                data : {"mobile":$("#mobile").val()}
+            })
+            time($("#smsCodeButton"))
+        })
+        var wait=60;
+        function time(o) {
+            if (wait == 0) {
+                o.removeAttr("disabled");
+                o.val("获取手机验证码");
+                wait = 60;
+            } else {
+                o.attr("disabled", true);
+                o.val(wait+"秒后可重发");
+                wait--;
+                setTimeout(function() {time(o)}, 1000)
+            }
+        }
+
+        //检测手机号码是否可用
+        $("#mobile").blur(function () {
+            if($("#mobile").val()){
+                $.ajax({
+                    url:"/user/isValid",
+                    method:"post",
+                    headers :{"X-CSRF-TOKEN":tokenVal},
+                    data : {"mobile":$("#mobile").val()},
+                    success:function(data){
+                        if (data.code =='0001'){
+                            $.toast(data.message, "text")
+                            $("#smsCodeButton").attr("disabled",true)
                         }
                     }
 
                 })
             }
-        })
-        $("#username").blur(function () {
-            $.ajax({
-                url:"/"
-
-            })
         })
 
     })

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <link  href="/css/weui.min.css" rel="stylesheet">
+    <link  href="/css/jquery-weui.min.css" rel="stylesheet">
+    <link  href="/css/master.css" rel="stylesheet">
+</head>
+<body ontouchstart>
+<div id="header" class="top-back">
+    <span class="top-bar-title">注册</span>
+</div>
+<div class="logo">
+</div>
+<form method="post" action="/user/register" autocomplete="off" id="registerForm">
+    <div class="weui-cells weui-cells_form">
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><img src="/img/phone.png" style="height: 1.5rem;width: 1.5rem"></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="text" name="mobile"  id="mobile"  th:value="${#httpServletRequest.getParameter('mobile')}">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd"><img src="/img/password.png" style="height: 1.5rem;width: 1.5rem"></div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="password" name="password"  id="password" placeholder="请输入密码">
+            </div>
+            <div class="weui-cell__ft">
+                <img src="/img/hide_password.png" style="height: 1.5rem;width: 1.5rem" id="pwdEye" class="invisible">
+            </div>
+        </div>
+        <div class="weui-cell">
+            <div class="weui-cell__hd">
+              <img src="/img/password.png" style="height: 1.5rem;width: 1.5rem">
+            </div>
+            <div class="weui-cell__bd">
+                <input class="weui-input" type="password" name="rePassword" id="rePassword" placeholder="请输入确认密码" >
+            </div>
+            <div class="weui-cell__ft">
+                <input type="hidden"  th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <img src="/img/hide_password.png" style="height: 1.5rem;width: 1.5rem" id="rePwdEye"  class="invisible">
+            </div>
+        </div>
+    </div>
+        <input type="button" value="注册"  id="submitButton" class="weui-btn weui-btn_primary">
+    </div>
+</form>
+
+<!-- body 最后 -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery-weui.min.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    $(function () {
+        var tokenVal = [[${_csrf.token}]];
+        $("#submitButton").click(function () {
+            var canSubmit = true;
+            var pwd = $("#password").val();
+            var repwd = $("#rePassword").val();
+            if(!pwd){
+                $.toast("密码不能为空", "text");
+                canSubmit = false
+            }else if(!repwd){
+                $.toast("确认密码不能为空", "text");
+                canSubmit = false
+            }else{
+                if (pwd != repwd){
+                    $.toast("两次密码不一致", "text");
+                    canSubmit = false
+                }
+            }
+            if(canSubmit){
+                $.ajax({
+                    url:"/user/register",
+                    method:"post",
+                    headers :{"X-CSRF-TOKEN":tokenVal},
+                    data :  $("#registerForm").serialize(),
+                    success:function(data){
+                        if (data.code =='0001'){
+
+                        }else if (data.code =='0000'){
+
+                        }
+                    }
+                })
+                $("#registerForm").submit();
+            }
+        })
+
+        
+        $("#pwdEye").click(function () {
+            setPasswordVisiblity(this,"password")
+        })
+        $("#rePwdEye").click(function () {
+            setPasswordVisiblity(this,"rePassword")
+        })
+        
+        function setPasswordVisiblity(node,id) {
+            if($(node).attr("class")=='invisible'){
+                $(node).attr("class",'visible');
+                node.src = '/img/show_password.png'
+                $("#"+id).prop("type","text");
+            }else{
+                $(node).attr("class",'invisible');
+                node.src = '/img/hide_password.png'
+                $("#"+id).prop("type","password");
+            }
+        }
+    })
+</script>
+</body>
+</html>

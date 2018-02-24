@@ -1,12 +1,18 @@
 package org.starlightfinancial.wechatweb.web;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.starlightfinancial.wechatweb.EmayConfig;
+import org.starlightfinancial.wechatweb.domain.EmaySmsMessage;
 import org.starlightfinancial.wechatweb.utils.CheckCodeGenerator;
-import org.starlightfinancial.wechatweb.utils.ResultModel;
+import org.starlightfinancial.wechatweb.utils.Util;
+import org.starlightfinancial.wechatweb.utils.WebResultModel;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,8 +25,13 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("/code")
 public class CodeController {
 
+    private static final Logger log = LoggerFactory.getLogger(CodeController.class);
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private EmayConfig emayConfig;
+
     /**
      * 返回图形验证码
      *
@@ -37,17 +48,45 @@ public class CodeController {
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expires", 0);
 
-
         CheckCodeGenerator checkCodeGenerator = new CheckCodeGenerator(120, 40, 4, 120);
-
         session.setAttribute("checkCode", checkCodeGenerator.getCode());
         checkCodeGenerator.write(response.getOutputStream());
-        stringRedisTemplate.opsForValue().set("test","test",100, TimeUnit.SECONDS);
 
     }
 
     /**
-     * 验证图形验证码
+     * 发送短信验证码
+     */
+    @RequestMapping("/getSmsCode")
+    @ResponseBody
+    public WebResultModel getSmsCode(String mobile,HttpSession session) throws Exception {
+        String smsCode = stringRedisTemplate.opsForValue().get(mobile);
+        Long expire = 0L;
+        //获得过期时间
+        if (!StringUtils.isEmpty(smsCode)) {
+            expire = stringRedisTemplate.getExpire(mobile);
+        }
+        //如果验证码是空或者过期时间小于30s,重新生成短信验证码
+        if (StringUtils.isEmpty(smsCode) || expire <= 30) {
+            smsCode = Util.getSmsCode();
+            //过期时间设置为3.5分钟,提醒用户有效期为3分钟
+            stringRedisTemplate.opsForValue().set(mobile, smsCode, 60 * 7/2, TimeUnit.SECONDS);
+        }
+        EmaySmsMessage smsMessage = new EmaySmsMessage();
+        smsMessage.setSmsCode(smsCode);
+        smsMessage.setMobile(mobile);
+        smsMessage.setAppId(emayConfig.getAppId());
+        smsMessage.setSecretKey(emayConfig.getSecretKey());
+        smsMessage.setAlgorithm(emayConfig.getAlgorithm());
+        smsMessage.setEncode(emayConfig.getEncode());
+        smsMessage.setHost(emayConfig.getHost());
+//        EmaySmsUtil.sendSingleSms(smsMessage);
+        session.setAttribute("isSendSms",true);
+        return  WebResultModel.ok();
+    }
+
+    /**
+     * 对图形验证码进行验证
      *
      * @param checkCode
      * @param session
@@ -55,14 +94,34 @@ public class CodeController {
      */
     @RequestMapping("/verifyCheckCode")
     @ResponseBody
-    public ResultModel verifyCheckCode(String checkCode, HttpSession session) {
+    public WebResultModel verifyCheckCode(String checkCode, HttpSession session) {
         String checkCodeOnServer = (String) session.getAttribute("checkCode");
-        ResultModel resultModel = new ResultModel();
-        if (checkCode.equals(checkCodeOnServer)) {
+        WebResultModel resultModel = new WebResultModel();
+        if (checkCode.equalsIgnoreCase(checkCodeOnServer)) {
             resultModel.setCode("0000");
         } else {
             resultModel.setCode("0001");
-            resultModel.setMessage("图形验证码输入错误,请刷新重试");
+            resultModel.setMessage("图形验证码输入错误,请重新输入");
+        }
+        return resultModel;
+    }
+
+    /**
+     * 校验短信验证码
+     * @param mobile
+     * @param smsCode
+     * @return
+     */
+    @RequestMapping("/verifySmsCode")
+    @ResponseBody
+    public WebResultModel checkSmsCode(String mobile, String  smsCode) {
+        String smsCodeCache = stringRedisTemplate.opsForValue().get(mobile);
+        WebResultModel resultModel = null;
+        if (smsCode.equals(smsCodeCache)){
+            resultModel  = WebResultModel.ok();
+        }else{
+            resultModel.setCode("0001");
+            resultModel.setMessage("手机验证码错误");
         }
         return resultModel;
     }
