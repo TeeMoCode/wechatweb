@@ -45,6 +45,6 @@ public class WebResultModel {
         return new WebResultModel("0000");
     }
     public static WebResultModel fail(String message){
-        return new WebResultModel("0000",null,message);
+        return new WebResultModel("0001",null,message);
     }
 }

@@ -134,7 +134,7 @@
         $("#mobile").blur(function () {
             if($("#mobile").val()){
                 $.ajax({
-                    url:"/user/isValid",
+                    url:"/user/isValid.do",
                     method:"post",
                     headers :{"X-CSRF-TOKEN":tokenVal},
                     data : {"mobile":$("#mobile").val()},

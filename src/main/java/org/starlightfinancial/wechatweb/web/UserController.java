@@ -62,7 +62,7 @@ public class UserController {
      * @param session
      * @return
      */
-    @RequestMapping("/register")
+    @RequestMapping("/register.do")
     public String register(String mobile, String password, String openId, HttpSession session) {
         //避免直接被请求
         Boolean isSendSms = (Boolean) session.getAttribute("isSendSms");
@@ -80,7 +80,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/isValid")
+    @RequestMapping("/isValid.do")
     @ResponseBody
     public WebResultModel isValid(String mobile) {
         WebResultModel resultModel = null;

@@ -1,5 +1,5 @@
 <!DOCTYPE html  >
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>我的贷款</title>
@@ -19,30 +19,17 @@
                 <div class="weui-panel weui-panel_access">
                     <div class="weui-panel__hd"></div>
                     <div class="weui-panel__bd">
-                        <a href="/loan-detail" class="weui-cell weui-cell_access weui-cell_link">
-                            <div class="weui-media-box weui-media-box_text">
-                                <h4 class="weui-media-box__title">合同号:JK123456789</h4>
-                                <p class="weui-media-box__desc">
-                                    贷款金额:200000 贷款期限:12个月
-                                </p>
-                            </div>
-                        </a>
-                        <a href="/loan-detail" class="weui-cell weui-cell_access weui-cell_link">
-                            <div class="weui-media-box weui-media-box_text">
-                                <h4 class="weui-media-box__title">合同号:JK123456789</h4>
-                                <p class="weui-media-box__desc">
-                                    贷款金额:200000 贷款期限:12个月
-                                </p>
-                            </div>
-                        </a>
-                        <a href="/loan-detail" class="weui-cell weui-cell_access weui-cell_link">
-                            <div class="weui-media-box weui-media-box_text">
-                                <h4 class="weui-media-box__title">合同号:JK123456789</h4>
-                                <p class="weui-media-box__desc">
-                                    贷款金额:200000 贷款期限:12个月
-                                </p>
-                            </div>
-                        </a>
+                        <div th:each="loan,loanStat:${loanHistory}" >
+                            <a th:href="@{/loan/loan-detail.do(contactNo=${loan.contractNo})}" class="weui-cell weui-cell_access weui-cell_link">
+                                <div class="weui-media-box weui-media-box_text">
+                                    <h4 class="weui-media-box__title">合同号: <span th:text="${loan.contractNo}" th:remove="tag"/></h4>
+                                    <p class="weui-media-box__desc">
+                                        <span>贷款金额: <span th:text="${loan.approvedAmount}" th:remove="tag"/></span>
+                                        <span>贷款期限: <span th:text="${loan.approvedTerm}" th:remove="tag"/></span>
+                                    </p>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

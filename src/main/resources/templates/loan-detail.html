@@ -1,5 +1,5 @@
 <!DOCTYPE html  >
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>贷款信息</title>
@@ -22,37 +22,37 @@
                         <div class="weui-cell__bd">
                             <p>合同编号</p>
                         </div>
-                        <div class="weui-cell__ft">JK123456789</div>
+                        <div class="weui-cell__ft" th:text="${loan.contractNo}"></div>
                     </div>
                     <div class="weui-cell">
                         <div class="weui-cell__bd">
                             <p>借款人</p>
                         </div>
-                        <div class="weui-cell__ft">张三</div>
+                        <div class="weui-cell__ft"  th:text="${loan.subject}"></div>
                     </div>
                     <div class="weui-cell">
                         <div class="weui-cell__bd">
                             <p>担保人</p>
                         </div>
-                        <div class="weui-cell__ft">李四</div>
+                        <div class="weui-cell__ft"  th:text="${loan.guarantee}" ></div>
                     </div>
                     <div class="weui-cell">
                         <div class="weui-cell__bd">
                             <p>贷款金额</p>
                         </div>
-                        <div class="weui-cell__ft">200000</div>
+                        <div class="weui-cell__ft"  th:text="${loan.approvedAmount}"></div>
                     </div>
                     <div class="weui-cell">
                         <div class="weui-cell__bd">
                             <p>每月还款日</p>
                         </div>
-                        <div class="weui-cell__ft">12日</div>
+                        <div class="weui-cell__ft"  th:text="${loan.repaymentDate}"></div>
                     </div>
                     <div class="weui-cell">
                         <div class="weui-cell__bd">
                             <p>还款状态</p>
                         </div>
-                        <div class="weui-cell__ft">正常</div>
+                        <div class="weui-cell__ft"  th:text="${loan.repaymentStatus}"></div>
                     </div>
                 </div>
             </div>
@@ -67,7 +67,7 @@
                 </div>
                 <p class="weui-tabbar__label">贷款申请</p>
             </a>
-            <a href="/loan-history" class="weui-tabbar__item">
+            <a href="/loan/loan-history.do" class="weui-tabbar__item">
                 <div class="weui-tabbar__icon">
                     <img src="/img/table.png" alt="">
                 </div>
