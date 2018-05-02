@@ -45,22 +45,24 @@ public class EmaySmsUtil {
      * 发送单条短信
      */
     public static void sendSingleSms(EmaySmsMessage emaySmsMessage) {
-        log.info("=============begin setSingleSms==================");
+        log.info("=============begin sendSingleSms==================");
         SmsSingleRequest pamars = new SmsSingleRequest();
         pamars.setContent(emaySmsMessage.getContent());
         pamars.setCustomSmsId(null);
         pamars.setExtendedCode(null);
         pamars.setMobile(emaySmsMessage.getMobile());
         ResultModel result = request(emaySmsMessage.getAppId(), emaySmsMessage.getSecretKey(), emaySmsMessage.getAlgorithm(), pamars,
-                "http://" + emaySmsMessage.getHost() + "/inter/sendSingleSMS", emaySmsMessage.isGizp(), emaySmsMessage.getEncode());
+                "http://" + emaySmsMessage.getHost() + "/inter/sendSingleSMS", emaySmsMessage.isGzip(), emaySmsMessage.getEncode());
         log.info("result code :" + result.getCode());
         if ("SUCCESS".equals(result.getCode())) {
             SmsResponse response = JsonHelper.fromJson(SmsResponse.class, result.getResult());
             if (response != null) {
                 log.info("data : " + response.getMobile() + "," + response.getSmsId() + "," + response.getCustomSmsId());
             }
+        }else{
+            log.info("发送短信失败,接收短信的号码:"+emaySmsMessage.getMobile()+",emay返回的信息:"+result);
         }
-        log.info("=============end setSingleSms==================");
+        log.info("=============end sendSingleSms==================");
     }
 
 
@@ -101,7 +103,7 @@ public class EmaySmsUtil {
             if (res.getResultCode().equals(EmayHttpResultCode.SUCCESS)) {
                 if (res.getHttpCode() == 200) {
                     code = res.getHeaders().get("result");
-                    if (code.equals("SUCCESS")) {
+                    if ("SUCCESS".equals(code)) {
                         byte[] data = res.getResultBytes();
                         log.info("response data size [en and com] : " + data.length);
                         data = AES.decrypt(data, secretKey.getBytes(), algorithm);

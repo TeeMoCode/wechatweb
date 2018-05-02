@@ -3,6 +3,9 @@ package org.starlightfinancial.wechatweb;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * @author senlin.deng
+ */
 @SpringBootApplication
 public class WechatwebApplication {
 

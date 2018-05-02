@@ -2,68 +2,85 @@ package org.starlightfinancial.wechatweb.utils.emay.util.http;
 
 /**
  * HTTP 访问结果编码
- * 
- * @author Frank
  *
+ * @author Frank
  */
 public enum EmayHttpResultCode {
+    /**
+     * 成功
+     */
+    SUCCESS("成功", "SUCCESS"),
+    /**
+     * URL为空
+     */
+    ERROR_URL_NULL("URL为空", "ERROR-URL-NULL"),
+    /**
+     * URL访问失败
+     */
+    ERROR_URL("URL访问失败", "ERROR-URL"),
+    /**
+     * HTTPS异常
+     */
+    ERROR_HTTPS_SSL("HTTPS异常", "ERROR-HTTPS-SSL"),
+    /**
+     * HTTP方法无法识别
+     */
+    ERROR_METHOD("HTTP方法无法识别", "ERROR-METHOD"),
+    /**
+     * 编码错误
+     */
+    ERROR_CHARSET("编码错误", "ERROR-CHARSET"),
+    /**
+     * 访问失败
+     */
+    ERROR_CONNECT("访问失败", "ERROR-CONNECT"),;
 
-	SUCCESS("成功", "SUCCESS"), //
-	ERROR_URL_NULL("URL为空", "ERROR-URL-NULL"), //
-	ERROR_URL("URL访问失败", "ERROR-URL"), //
-	ERROR_HTTPS_SSL("HTTPS异常", "ERROR-HTTPS-SSL"), //
-	ERROR_METHOD("HTTP方法无法识别", "ERROR-METHOD"), //
-	ERROR_CHARSET("编码错误", "ERROR-CHARSET"), //
-	ERROR_CONNECT("访问失败", "ERROR-CONNECT"), //
+    /**
+     * 名称
+     */
+    private String name;
+    /**
+     * 编码
+     */
+    private String code;
 
-	;
+    private EmayHttpResultCode(String name, String code) {
+        this.name = name;
+        this.code = code;
+    }
 
-	/**
-	 * 名称
-	 */
-	private String name;
-	/**
-	 * 编码
-	 */
-	private String code;
+    public static String findNameByCode(String code) {
+        for (EmayHttpResultCode oc : EmayHttpResultCode.values()) {
+            if (oc.getCode().equals(code)) {
+                return oc.getName();
+            }
+        }
+        return null;
+    }
 
-	private EmayHttpResultCode(String name, String code) {
-		this.name = name;
-		this.code = code;
-	}
+    public static String findCodeByName(String name) {
+        for (EmayHttpResultCode oc : EmayHttpResultCode.values()) {
+            if (oc.getName().equals(name)) {
+                return oc.getCode();
+            }
+        }
+        return null;
+    }
 
-	public static String findNameByCode(String code) {
-		for (EmayHttpResultCode oc : EmayHttpResultCode.values()) {
-			if (oc.getCode().equals(code)) {
-				return oc.getName();
-			}
-		}
-		return null;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public static String findCodeByName(String name) {
-		for (EmayHttpResultCode oc : EmayHttpResultCode.values()) {
-			if (oc.getName().equals(name)) {
-				return oc.getCode();
-			}
-		}
-		return null;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getCode() {
+        return code;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public void setCode(String code) {
+        this.code = code;
+    }
 
 }

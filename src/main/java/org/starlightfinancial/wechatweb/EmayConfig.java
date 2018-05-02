@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * 亿美短信平台配置
+ *
+ * @author senlin.deng
  */
 @Component
 public class EmayConfig {

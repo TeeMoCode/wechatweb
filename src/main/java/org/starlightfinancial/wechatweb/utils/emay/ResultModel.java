@@ -26,4 +26,11 @@ public class ResultModel {
 		this.result = result;
 	}
 
+	@Override
+	public String toString() {
+		return "ResultModel{" +
+				"code='" + code + '\'' +
+				", result='" + result + '\'' +
+				'}';
+	}
 }

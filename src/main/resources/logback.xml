@@ -91,7 +91,7 @@
     </appender>
 
     <!-- 生产环境用info -->
-    <logger name="org.starlightfinancial.deductiongateway" level="${log.lever}">
+    <logger name="org.starlightfinancial.wechatweb" level="${log.lever}">
         <appender-ref ref="debugAppender"/>
         <appender-ref ref="infoAppender"/>
         <appender-ref ref="errorAppender"/>

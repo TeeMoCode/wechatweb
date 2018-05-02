@@ -3,6 +3,9 @@ package org.starlightfinancial.wechatweb.domain;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+/**
+ * @author senlin.deng
+ */
 public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecificationExecutor<User> {
 
     User findByOpenId(String openId);

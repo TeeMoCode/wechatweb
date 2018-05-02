@@ -1,8 +1,22 @@
 package org.starlightfinancial.wechatweb.utils.emay;
 
+/**
+ * @author senlin.deng
+ */
 public enum EmayResultCodeEnum {
+    /**
+     * 成功
+     */
     CODE_0("0", "成功"),
+
+    /**
+     * 系统错误
+     */
     CODE_1("-1", "系统错误"),
+
+    /**
+     * 客户端异常
+     */
     CODE_2("-2", "客户端异常"),
     CODE_3("-101", "命令不被支持"),
     CODE_4("-102", "RegistryTransInfo删除信息失败（转接）"),
@@ -92,12 +106,12 @@ public enum EmayResultCodeEnum {
     }
 
     public static String getValueByCode(String code) {
-        for (EmayResultCodeEnum _enum : EmayResultCodeEnum.values()) {
-            if (code.equals(_enum.getCode())) {
-                return _enum.getValue();
+        for (EmayResultCodeEnum emayResultCodeEnum : EmayResultCodeEnum.values()) {
+            if (code.equals(emayResultCodeEnum.getCode())) {
+                return emayResultCodeEnum.getValue();
             }
         }
         return null;
     }
 
-    }
+}

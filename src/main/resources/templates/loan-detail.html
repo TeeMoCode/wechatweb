@@ -4,83 +4,71 @@
     <meta charset="UTF-8">
     <title>贷款信息</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-    <link  href="/css/weui.min.css" rel="stylesheet">
-    <link  href="/css/jquery-weui.min.css" rel="stylesheet">
-    <link  href="/css/master.css" rel="stylesheet">
+    <link href="/css/weui.min.css" rel="stylesheet">
+    <link href="/css/jquery-weui.min.css" rel="stylesheet">
+    <link href="/css/master.css" rel="stylesheet">
 </head>
 <body ontouchstart>
 
 
-        <div id="header" class="top-back">
-            <span class="top-bar-title">贷款信息</span>
-        </div>
+<div id="header" class="top-back">
+    <span class="top-bar-title">贷款信息</span>
+</div>
 
-        <div class="weui-panel weui-panel_access">
-            <div class="weui-panel__bd">
-                <div class="weui-cells">
-                    <div class="weui-cell">
-                        <div class="weui-cell__bd">
-                            <p>合同编号</p>
-                        </div>
-                        <div class="weui-cell__ft" th:text="${loan.contractNo}"></div>
-                    </div>
-                    <div class="weui-cell">
-                        <div class="weui-cell__bd">
-                            <p>借款人</p>
-                        </div>
-                        <div class="weui-cell__ft"  th:text="${loan.subject}"></div>
-                    </div>
-                    <div class="weui-cell">
-                        <div class="weui-cell__bd">
-                            <p>担保人</p>
-                        </div>
-                        <div class="weui-cell__ft"  th:text="${loan.guarantee}" ></div>
-                    </div>
-                    <div class="weui-cell">
-                        <div class="weui-cell__bd">
-                            <p>贷款金额</p>
-                        </div>
-                        <div class="weui-cell__ft"  th:text="${loan.approvedAmount}"></div>
-                    </div>
-                    <div class="weui-cell">
-                        <div class="weui-cell__bd">
-                            <p>每月还款日</p>
-                        </div>
-                        <div class="weui-cell__ft"  th:text="${loan.repaymentDate}"></div>
-                    </div>
-                    <div class="weui-cell">
-                        <div class="weui-cell__bd">
-                            <p>还款状态</p>
-                        </div>
-                        <div class="weui-cell__ft"  th:text="${loan.repaymentStatus}"></div>
-                    </div>
+<div class="weui-panel weui-panel_access">
+    <div class="weui-panel__bd">
+        <div class="weui-cells" th:if="${loan != null}">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>合同编号</p>
                 </div>
+                <div class="weui-cell__ft" th:text="${loan.contractNo}"></div>
             </div>
-            <div class="weui-panel__ft">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>借款人</p>
+                </div>
+                <div class="weui-cell__ft" th:text="${loan.borrower}"></div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>担保人</p>
+                </div>
+                <div class="weui-cell__ft" th:text="${loan.guarantee}"></div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>贷款金额</p>
+                </div>
+                <div class="weui-cell__ft" th:text="${loan.amount}"></div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>每月还款日</p>
+                </div>
+                <div class="weui-cell__ft" th:text="${loan.repaymentDay}"></div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>还款状态</p>
+                </div>
+                <div class="weui-cell__ft" th:text="${loan.status}"></div>
             </div>
         </div>
-
-        <div class="weui-tabbar">
-            <a href="/loan-application" class="weui-tabbar__item">
-                <div class="weui-tabbar__icon">
-                    <img src="/img/clock.png" alt="">
+        <div class="weui-cells" th:if="${loan == null}">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    未查询到数据
                 </div>
-                <p class="weui-tabbar__label">贷款申请</p>
-            </a>
-            <a href="/loan/loan-history.do" class="weui-tabbar__item">
-                <div class="weui-tabbar__icon">
-                    <img src="/img/table.png" alt="">
-                </div>
-                <p class="weui-tabbar__label">我的贷款</p>
-            </a>
-            <a href="/account-center" class="weui-tabbar__item">
-                <div class="weui-tabbar__icon">
-                    <img src="/img/people.png" alt="">
-                </div>
-                <p class="weui-tabbar__label">个人中心</p>
-            </a>
+            </div>
         </div>
+    </div>
+    <div class="weui-panel__ft">
+    </div>
+</div>
 
+
+<div th:include="common:: #navibar" th:remove="tag"></div>
 <!-- body 最后 -->
 <script src="/js/jquery.min.js"></script>
 <script src="/js/jquery-weui.min.js"></script>

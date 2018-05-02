@@ -1,5 +1,10 @@
 package org.starlightfinancial.wechatweb.utils;
 
+import org.starlightfinancial.wechatweb.enums.ConstantsEnum;
+
+/**
+ * @author senlin.deng
+ */
 public class WebResultModel {
 
 
@@ -8,15 +13,19 @@ public class WebResultModel {
     private String message;
 
 
-    public WebResultModel(){}
+    public WebResultModel() {
+    }
 
-    public WebResultModel(String code){}
+    public WebResultModel(String code) {
+        this.code = code;
+    }
 
     public WebResultModel(String code, Object data, String message) {
         this.code = code;
         this.data = data;
         this.message = message;
     }
+
     public String getCode() {
         return code;
     }
@@ -41,10 +50,14 @@ public class WebResultModel {
         this.message = message;
     }
 
-    public static WebResultModel ok(){
-        return new WebResultModel("0000");
+    public static WebResultModel success() {
+        return new WebResultModel(ConstantsEnum.REQUESTSUCCESS.getCode());
     }
-    public static WebResultModel fail(String message){
-        return new WebResultModel("0001",null,message);
+
+    public static WebResultModel fail(String message) {
+        return new WebResultModel(ConstantsEnum.REQUESTFAIL.getCode(), null, message);
+    }
+    public static WebResultModel fail(String message,Object data) {
+        return new WebResultModel(ConstantsEnum.REQUESTFAIL.getCode(), data, message);
     }
 }

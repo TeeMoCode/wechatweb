@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <title>注册</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-    <link  href="/css/weui.min.css" rel="stylesheet">
-    <link  href="/css/jquery-weui.min.css" rel="stylesheet">
-    <link  href="/css/master.css" rel="stylesheet">
+    <link href="/css/weui.min.css" rel="stylesheet">
+    <link href="/css/jquery-weui.min.css" rel="stylesheet">
+    <link href="/css/master.css" rel="stylesheet">
 </head>
 <body ontouchstart>
 <div id="header" class="top-back">
@@ -19,18 +19,18 @@
         <div class="weui-cell">
             <div class="weui-cell__hd"><img src="/img/phone.png" style="height: 1.5rem;width: 1.5rem"></div>
             <div class="weui-cell__bd">
-                <input class="weui-input" type="text" name="mobile"  id="mobile" placeholder="请输入手机号">
+                <input class="weui-input" type="text" name="mobile" id="mobile" placeholder="请输入手机号">
             </div>
         </div>
         <div class="weui-cell">
             <div class="weui-cell__hd">
-              <img src="/img/verifycode.png" style="height: 1.5rem;width: 1.5rem">
+                <img src="/img/verifycode.png" style="height: 1.5rem;width: 1.5rem">
             </div>
             <div class="weui-cell__bd">
-                <input class="weui-input" type="text" name="checkCode" id="checkCode" placeholder="请输入图形验证码" >
+                <input class="weui-input" type="text" name="checkCode" id="checkCode" placeholder="请输入四位图形验证码">
             </div>
             <div class="weui-cell__ft">
-                <img class="weui-vcode-img" src="/code/getCheckCode"  title="点击更换验证码" id="checkCodeImg">
+                <img class="weui-vcode-img" src="/code/getCheckCode" title="点击更换验证码" id="checkCodeImg">
             </div>
         </div>
         <div class="weui-cell">
@@ -38,114 +38,109 @@
                 <img src="/img/smscode.png" style="height: 1.5rem;width: 1.5rem">
             </div>
             <div class="weui-cell__bd">
-                <input class="weui-input" type="text" name="smsCode" id="smsCode" placeholder="请输入短信验证码" >
+                <input class="weui-input" type="text" name="smsCode" id="smsCode" placeholder="请输入短信验证码">
             </div>
-            <div class="weui-cell__ft" >
-                <input type="button" value="获取手机验证码" id="smsCodeButton" class="weui-btn weui-btn_primary" disabled>
+            <div class="weui-cell__ft">
+                <input type="button" value="获取手机验证码" id="smsCodeBtn" class="weui-btn weui-btn_primary" disabled>
             </div>
         </div>
     </div>
-        <input type="button" value="提交"  id="submitButton" class="weui-btn weui-btn_primary">
+    <input type="button" value="提交" id="submitbtn" class="weui-btn weui-btn_primary">
     </div>
 </form>
 
 <!-- body 最后 -->
 <script src="/js/jquery.min.js"></script>
 <script src="/js/jquery-weui.min.js"></script>
+<script src="/js/app.js"></script>
 <script type="text/javascript" th:inline="javascript">
     $(function () {
         var tokenVal = [[${_csrf.token}]];
-        $("#submitButton").click(function () {
+        $("#submitbtn").click(function () {
             var canSubmit = true;
-            if(!$("#mobile").val()){
+            if (!$("#mobile").val()) {
                 $.toast("手机号码不能为空", "text")
                 canSubmit = false
-            }else if(!$("#checkCode").val()){
+            } else if (!$("#checkCode").val()) {
                 $.toast("图形验证码不能为空", "text")
                 canSubmit = false
-            }else if(!$("#smsCode").val()){
+            } else if (!$("#smsCode").val()) {
                 $.toast("短信验证码不能为空", "text")
                 canSubmit = false
             }
-            if(canSubmit){
-                $.ajax({
-                    url:"/code/verifyCheckCode",
-                    method:"post",
-                    headers :{"X-CSRF-TOKEN":tokenVal},
-                    data : $("#registerForm").serialize(),
-                    success:function(data){
-                        if (data.code =='0001'){
-                            $.toast(data.message, "text")
-                        }else if (data.code =='0000'){
-                            window.location.href='/register-detail?mobile='+$("#mobile").val()
-                        }
+            if (canSubmit) {
+                postByAjax("/code/verifySmsCode", $("#registerForm").serialize(), tokenVal, function (data) {
+                    if (data.code == '0001') {
+                        $.toast(data.message, "text")
+                    } else if (data.code == '0000') {
+                        window.location.href = '/register-detail?mobile=' + $("#mobile").val()
                     }
                 })
-                $("#registerForm").submit();
             }
         })
         //    验证码图片点击后,获得新的验证码
         $("#checkCodeImg").click(function () {
-            $("#checkCodeImg").attr("src","/code/getCheckCode?"+new Date().getTime());
+            $("#checkCodeImg").attr("src", "/code/getCheckCode?" + new Date().getTime());
         })
         $("#checkCode").blur(function () {
             var checkCodeValue = $("#checkCode").val();
-            $("#smsCodeButton").removeAttr("disabled");
-            if(checkCodeValue){
-                $.ajax({
-                    url:"/code/verifyCheckCode",
-                    method:"post",
-                    headers :{"X-CSRF-TOKEN":tokenVal},
-                    data : {"checkCode" :checkCodeValue},
-                    success:function(data){
-                        if (data.code =='0001'){
+            $("#smsCodeBtn").removeAttr("disabled");
+            if (checkCodeValue) {
+                postByAjax("/code/verifyCheckCode",
+                    {"checkCode": checkCodeValue},
+                    tokenVal,
+                    function (data) {
+                        if (data.code == '0001') {
                             $.toast(data.message, "text")
-                            $("#smsCodeButton").attr("disabled",true)
+                            $("#smsCodeBtn").attr("disabled", true)
                         }
-                    }
-                })
+                    })
             }
         })
 
-        $("#smsCodeButton").click(function () {
-            $.ajax({
-                url:"/code/getSmsCode",
-                method:"post",
-                headers :{"X-CSRF-TOKEN":tokenVal},
-                data : {"mobile":$("#mobile").val()}
-            })
-            time($("#smsCodeButton"))
-        })
-        var wait=60;
-        function time(o) {
-            if (wait == 0) {
-                o.removeAttr("disabled");
-                o.val("获取手机验证码");
-                wait = 60;
-            } else {
-                o.attr("disabled", true);
-                o.val(wait+"秒后可重发");
-                wait--;
-                setTimeout(function() {time(o)}, 1000)
+        $("#smsCodeBtn").click(function () {
+            if ($("#mobile").val()) {
+                postByAjax("/code/getSmsCode", {"mobile": $("#mobile").val()}, tokenVal, function (data) {
+                    if (data.code == '0000') {
+                        $.toast("短信已发送,请注意查收", "text");
+                    } else {
+                        $.toast(data.message, "text");
+                    }
+                })
+                time($("#smsCodeBtn"))
+            }else{
+                $.toast("手机号不能为空", "text");
             }
-        }
+
+
+        })
 
         //检测手机号码是否可用
         $("#mobile").blur(function () {
-            if($("#mobile").val()){
-                $.ajax({
-                    url:"/user/isValid.do",
-                    method:"post",
-                    headers :{"X-CSRF-TOKEN":tokenVal},
-                    data : {"mobile":$("#mobile").val()},
-                    success:function(data){
-                        if (data.code =='0001'){
-                            $.toast(data.message, "text")
-                            $("#smsCodeButton").attr("disabled",true)
-                        }
-                    }
-
-                })
+            var mobile = $("#mobile").val();
+            if (mobile) {
+                if (/^(1[3456789])[0-9]{9}$/.test(mobile)) {
+                    postByAjax("/user/isValid.do",
+                        {"mobile": mobile},
+                        tokenVal,
+                        function (data) {
+                            if (data.code == '0001') {
+                                $.toast(data.message, "text");
+                                $("#smsCodeBtn").attr("disabled", true);
+                                $("#smsCodeBtn").removeClass("weui-btn_primary");
+                                $("#smsCodeBtn").addClass("weui-btn_disabled");
+                            } else {
+                                $("#smsCodeBtn").removeAttr("disabled");
+                                $("#smsCodeBtn").removeClass("weui-btn_disabled");
+                                $("#smsCodeBtn").addClass("weui-btn_primary");
+                            }
+                        })
+                } else {
+                    $.toast("请输入正确的手机号", "text");
+                    $("#smsCodeBtn").attr("disabled", true);
+                    $("#smsCodeBtn").removeClass("weui-btn_primary");
+                    $("#smsCodeBtn").addClass("weui-btn_disabled");
+                }
             }
         })
 

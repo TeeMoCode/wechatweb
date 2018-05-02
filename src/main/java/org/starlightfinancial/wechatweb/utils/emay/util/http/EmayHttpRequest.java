@@ -86,7 +86,7 @@ public abstract class EmayHttpRequest<T extends Object> {
 		if (url == null || params == null) {
 			return;
 		}
-		if (this.getMethod().equalsIgnoreCase("GET")) {
+		if ("GET".equalsIgnoreCase(this.getMethod())) {
 			String getprams = this.paramsToStringForGet();
 			if (url.indexOf("?") > 0) {
 				url = url + "&" + getprams;

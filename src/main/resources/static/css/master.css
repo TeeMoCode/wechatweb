@@ -28,3 +28,8 @@
     height: 4.2rem;
     background: url(/img/logo.png) 50% center / 7.3rem no-repeat;
 }
+.wrapper {
+    max-width: 640px;
+    margin: 0 auto;
+    overflow: hidden;
+}

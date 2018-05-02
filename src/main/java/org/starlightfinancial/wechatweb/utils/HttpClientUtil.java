@@ -1,113 +1,137 @@
 package org.starlightfinancial.wechatweb.utils;
 
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.concurrent.FutureCallback;
-import org.apache.http.impl.client.LaxRedirectStrategy;
-import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
-import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
+import org.apache.http.Consts;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.fluent.Request;
+import org.apache.http.entity.ContentType;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
-import javax.net.ssl.SSLContext;
-import java.io.IOException;
-import java.util.HashMap;
+import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
-@Component
+/**
+ * @author senlin.deng
+ */
 public class HttpClientUtil {
 
-    private static final Logger log = LoggerFactory.getLogger(HttpClientUtil.class);
-    public static Map send(String url, List<BasicNameValuePair> nvps) throws Exception {
-        Map<String, String> map = new HashMap();
-        HttpAsyncClientBuilder httpAsyncClientBuilder = HttpAsyncClientBuilder.create();
-        configureHttpClient(httpAsyncClientBuilder);
-        CloseableHttpAsyncClient httpclient = httpAsyncClientBuilder.build();
-        CountDownLatch latch = new CountDownLatch(1);
-        try {
-            HttpPost httpPost = new HttpPost(url);
-            RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(60000).build();
-            httpPost.setEntity(new UrlEncodedFormEntity(nvps, "UTF-8"));
-            httpPost.setHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
-
-            httpclient.start();
-            // 执行postMethod
-            httpclient.execute(httpPost, new FutureCallback<HttpResponse>() {
-
-                public void completed(final HttpResponse response) {
-                    try {
-                        String returnData = EntityUtils.toString(response.getEntity(), "UTF-8");
-                        log.info("调用返回的数据"+returnData);
-                        map.put("returnData", returnData);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    latch.countDown();
-                }
-
-                public void failed(final Exception ex) {
-                    latch.countDown();
-                }
-
-                public void cancelled() {
-                    latch.countDown();
-                }
-            });
-
-            try {
-                latch.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        } catch (Exception e) {
-            throw e;
-        } finally {
-            close(httpclient);
-        }
-
-        return map;
-    }
-
-    /**
-     * 关闭client对象
-     *
-     * @param client
-     */
-    private static void close(CloseableHttpAsyncClient client) {
-        try {
-            client.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    private static final Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 
 
     /**
-     * 配置HttpAsyncClientBuilder,信任所有证书,重定向策略
+     * post 请求
      *
-     * @param clientBuilder
+     * @param url
+     * @return
      */
-    public static void configureHttpClient(HttpAsyncClientBuilder clientBuilder) {
+    public static String post(String url) {
+        return post(url, "");
+    }
+
+    /**
+     * post请求
+     *
+     * @param url
+     * @param data
+     * @return
+     */
+    public static String post(String url, String data) {
+        return httpPost(url, data);
+    }
+
+    /**
+     * 发送http post请求
+     *
+     * @param url      url
+     * @param instream post数据的字节流
+     * @return
+     */
+    public static String post(String url, InputStream instream) {
         try {
-            // 信任所有
-            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, (chain, authType) -> true).build();
-
-            clientBuilder.setSSLContext(sslContext);
-
-            clientBuilder.setRedirectStrategy(new LaxRedirectStrategy());//设置重定向策略,如果是重定向,继续访问
-
+            HttpEntity entity = Request.Post(url)
+                    .bodyStream(instream, ContentType.create("text/html", Consts.UTF_8))
+                    .execute().returnResponse().getEntity();
+            return entity != null ? EntityUtils.toString(entity) : null;
         } catch (Exception e) {
+            logger.error("post请求异常，" + e.getMessage() + "\n post url:" + url);
             e.printStackTrace();
         }
+        return null;
     }
+    /**
+     * post 请求提交表单
+     *
+     * @param url
+     * @param data
+     * @return
+     */
+    public  static String post(String url, List<BasicNameValuePair> data) {
+        try {
+            HttpEntity entity = Request.Post(url)
+                    .bodyForm(data,Consts.UTF_8)
+                    .execute().returnResponse().getEntity();
+            return entity != null ? EntityUtils.toString(entity) : null;
+        } catch (Exception e) {
+            logger.error("post请求异常，" + e.getMessage() + "\n post url:" + url);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * get请求
+     *
+     * @param url
+     * @return
+     */
+    public static String get(String url) {
+        return httpGet(url);
+    }
+
+    /**
+     * post 请求
+     *
+     * @param url
+     * @param data
+     * @return
+     */
+    private static String httpPost(String url, String data) {
+        try {
+            HttpEntity entity = Request.Post(url)
+                    .bodyString(data, ContentType.create("text/html", Consts.UTF_8))
+                    .execute().returnResponse().getEntity();
+            return entity != null ? EntityUtils.toString(entity) : null;
+        } catch (Exception e) {
+            logger.error("post请求异常，" + e.getMessage() + "\n post url:" + url);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+
+
+    /**
+     * 发送get请求
+     *
+     * @param url
+     * @return
+     */
+    private static String httpGet(String url) {
+        try {
+            HttpEntity entity = Request.Get(url).
+                    execute().returnResponse().getEntity();
+            return entity != null ? EntityUtils.toString(entity) : null;
+        } catch (Exception e) {
+            logger.error("get请求异常，" + e.getMessage() + "\n get url:" + url);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

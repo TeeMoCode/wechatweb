@@ -1,13 +1,18 @@
-package org.starlightfinancial.wechatweb.utils;
+package org.starlightfinancial.wechatweb.security.encoder;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.starlightfinancial.wechatweb.utils.EncryptHelper;
 
-
-public class MyPasswordEncoder implements PasswordEncoder {
+/**
+ * 使用手机和密码登录时的密码编码器
+ *
+ * @author senlin.deng
+ */
+public class CustomPasswordEncoder implements PasswordEncoder {
 
     @Override
     public String encode(CharSequence rawPassword) {
-        String encodedPassword = EncryptHelper.Instance.getEncString(rawPassword+"");
+        String encodedPassword = EncryptHelper.Instance.getEncString(rawPassword + "");
         return encodedPassword;
     }
 

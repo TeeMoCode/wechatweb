@@ -1,0 +1,84 @@
+<!DOCTYPE html  >
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>申请进度</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <link  href="/css/weui.min.css" rel="stylesheet">
+    <link  href="/css/jquery-weui.min.css" rel="stylesheet">
+    <link  href="/css/master.css" rel="stylesheet">
+</head>
+<body ontouchstart>
+
+        <div id="header" class="top-back">
+            <span class="top-bar-title">申请进度</span>
+        </div>
+            <div class="weui-cells" th:if="${progress == null}">
+                <div class="weui-cell">
+                    <div class="weui-cell__bd">
+                        未查询到数据
+                    </div>
+                </div>
+            </div>
+                <div class="weui-cells" th:if="${progress != null}">
+                    <div class="weui-cell">
+                        <div class="weui-cell__bd">
+                            <p>当前流程</p>
+                        </div>
+                        <div class="weui-cell__ft" th:text="${progress.flow_title}"></div>
+                    </div>
+                    <div class="weui-cell">
+                        <div class="weui-cell__bd" >
+                            <p>当前流程结论</p>
+                        </div>
+                        <div class="weui-cell__ft" th:text="${progress.conclusionInChinese}"></div>
+                    </div>
+                    <div class="weui-cell">
+                        <div class="weui-cell__bd" >
+                            <p>贷款金额</p>
+                        </div>
+                        <div class="weui-cell__ft" th:text="${progress.amount}"></div>
+                    </div>
+                    <div class="weui-cell">
+                        <div class="weui-cell__bd">
+                            <p>贷款期限</p>
+                        </div>
+                        <div class="weui-cell__ft" >
+                            <span th:text="${progress.terms}" th:remove="tag"/> </span>
+                            <span th:text="${progress.unit_cn}" th:remove="tag"/>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--<div  style="padding: 2px 15px 0px 15px;">-->
+                    <!--<div  style="color: #cc2c2c;border-top: 1px solid #cc2c2c;padding: 2px 0px 2px 0px;font-size: 16px;">-->
+                        <!--时间线-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="weui-cell">-->
+                    <!--<div class="weui-cell__bd">-->
+                        <!--<p>立项</p>-->
+                    <!--</div>-->
+                    <!--<div class="weui-cell__ft">2018-01-10</div>-->
+                <!--</div>-->
+                <!--<div class="weui-cell">-->
+                    <!--<div class="weui-cell__bd">-->
+                        <!--<p>审批中</p>-->
+                    <!--</div>-->
+                    <!--<div class="weui-cell__ft">2018-01-11</div>-->
+                <!--</div>-->
+                <!--<div class="weui-cell">-->
+                    <!--<div class="weui-cell__bd">-->
+                        <!--<p>审批通过</p>-->
+                    <!--</div>-->
+                    <!--<div class="weui-cell__ft">2018-01-13</div>-->
+                <!--</div>-->
+
+        <div th:include="common:: #navibar" th:remove="tag"></div>
+
+<!-- body 最后 -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery-weui.min.js"></script>
+</body>
+</html>

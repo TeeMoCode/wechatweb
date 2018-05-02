@@ -2,8 +2,11 @@ package org.starlightfinancial.wechatweb.service;
 
 import org.starlightfinancial.wechatweb.domain.User;
 
+/**
+ *  @author senlin.deng
+ */
 public interface UserService {
-    void saveUser(User user);
+    void saveOrUpdateUser(User user);
 
     User findByOpenId(String openId);
 

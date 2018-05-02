@@ -1,5 +1,5 @@
 <!DOCTYPE html  >
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>账号信息</title>
@@ -19,44 +19,27 @@
                 <div class="weui-cell__bd">
                     <p>姓名</p>
                 </div>
-                <div class="weui-cell__ft">张三</div>
+                <div class="weui-cell__ft"  th:text="${session.SPRING_SECURITY_CONTEXT.authentication.principal.username}"></div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">
                     <p>身份证号</p>
                 </div>
-                <div class="weui-cell__ft">5001231980****1234</div>
+                <div class="weui-cell__ft" th:text="${session.SPRING_SECURITY_CONTEXT.authentication.principal.certificateNo}"></div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">
                     <p>手机号码</p>
                 </div>
-                <div class="weui-cell__ft">138****1234</div>
+                <div class="weui-cell__ft" th:text="${session.SPRING_SECURITY_CONTEXT.authentication.principal.mobile}"></div>
             </div>
             <a href="/account-setting" class="weui-btn weui-btn_warn">设置账号信息</a>
+            <a href="/user/logout.do" class="weui-btn weui-btn_warn">退出登录</a>
         </div>
 
 
-        <div class="weui-tabbar">
-            <a href="/loan-application" class="weui-tabbar__item">
-                <div class="weui-tabbar__icon">
-                    <img src="/img/clock.png" alt="">
-                </div>
-                <p class="weui-tabbar__label">贷款申请</p>
-            </a>
-            <a href="/loan/loan-history.do" class="weui-tabbar__item">
-                <div class="weui-tabbar__icon">
-                    <img src="/img/table.png" alt="">
-                </div>
-                <p class="weui-tabbar__label">我的贷款</p>
-            </a>
-            <a href="/account-center" class="weui-tabbar__item">
-                <div class="weui-tabbar__icon">
-                    <img src="/img/people.png" alt="">
-                </div>
-                <p class="weui-tabbar__label">个人中心</p>
-            </a>
-        </div>
+
+        <div th:include="common:: #navibar" th:remove="tag"></div>
 
 <!-- body 最后 -->
 <script src="/js/jquery.min.js"></script>

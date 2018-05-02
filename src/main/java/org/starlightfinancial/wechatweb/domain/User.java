@@ -9,6 +9,7 @@ import java.util.Date;
 
 /**
  * 用户表
+ * @author senlin.deng
  */
 @Entity(name = "sys_user")
 public class User implements UserDetails {
@@ -24,17 +25,24 @@ public class User implements UserDetails {
 
     @Column(name = "mobile")
     private String mobile;
+
     @Column(name = "certificate_no")
     private String certificateNo;
+
     @Column(name = "open_id")
     private String openId;
+
     @Column(name = "register_time")
     private Date registerTime;
+
     @Column(name = "last_login_time")
     private Date lastLoginTime;
 
     @Column(name = "is_delete")
     private String isDelete;
+
+    @Column(name = "is_logout")
+    private String isLogout;
 
     public Integer getId() {
         return id;
@@ -44,6 +52,7 @@ public class User implements UserDetails {
         this.id = id;
     }
 
+    @Override
     public String getUsername() {
         return username;
     }
@@ -74,6 +83,7 @@ public class User implements UserDetails {
         return null;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
@@ -130,4 +140,15 @@ public class User implements UserDetails {
         this.isDelete = isDelete;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getIsLogout() {
+        return isLogout;
+    }
+
+    public void setIsLogout(String isLogout) {
+        this.isLogout = isLogout;
+    }
 }

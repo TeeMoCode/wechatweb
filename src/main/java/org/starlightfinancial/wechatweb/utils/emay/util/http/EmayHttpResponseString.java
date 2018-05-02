@@ -76,7 +76,7 @@ public class EmayHttpResponseString {
 	public void setResultString(String resultString) {
 		this.resultString = resultString;
 	}
-
+	@Override
 	public String toString(){
 		StringBuffer buffer = new StringBuffer();
 		for(Field filed : this.getClass().getDeclaredFields()){

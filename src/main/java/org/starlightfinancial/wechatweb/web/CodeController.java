@@ -1,17 +1,17 @@
 package org.starlightfinancial.wechatweb.web;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.starlightfinancial.wechatweb.EmayConfig;
 import org.starlightfinancial.wechatweb.domain.EmaySmsMessage;
 import org.starlightfinancial.wechatweb.utils.CheckCodeGenerator;
-import org.starlightfinancial.wechatweb.utils.Util;
 import org.starlightfinancial.wechatweb.utils.WebResultModel;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,12 +20,14 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 验证码管理Controller
+ *
+ * @author senlin.deng
  */
 @Controller
 @RequestMapping("/code")
 public class CodeController {
 
-    private static final Logger log = LoggerFactory.getLogger(CodeController.class);
+    private static final Logger logger = LoggerFactory.getLogger(CodeController.class);
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
@@ -59,18 +61,21 @@ public class CodeController {
      */
     @RequestMapping("/getSmsCode")
     @ResponseBody
-    public WebResultModel getSmsCode(String mobile,HttpSession session) throws Exception {
+    public WebResultModel getSmsCode(String mobile, HttpSession session) throws Exception {
+        if (StringUtils.isEmpty(mobile)){
+            return WebResultModel.fail("手机号码不能为空");
+        }
         String smsCode = stringRedisTemplate.opsForValue().get(mobile);
         Long expire = 0L;
         //获得过期时间
-        if (!StringUtils.isEmpty(smsCode)) {
+        if (StringUtils.isNotBlank(smsCode)) {
             expire = stringRedisTemplate.getExpire(mobile);
         }
         //如果验证码是空或者过期时间小于30s,重新生成短信验证码
-        if (StringUtils.isEmpty(smsCode) || expire <= 30) {
-            smsCode = Util.getSmsCode();
+        if (StringUtils.isBlank(smsCode) || expire <= 30) {
+            smsCode = RandomStringUtils.randomNumeric(6);
             //过期时间设置为3.5分钟,提醒用户有效期为3分钟
-            stringRedisTemplate.opsForValue().set(mobile, smsCode, 60 * 7/2, TimeUnit.SECONDS);
+            stringRedisTemplate.opsForValue().set(mobile, smsCode, 60 * 7 / 2, TimeUnit.SECONDS);
         }
         EmaySmsMessage smsMessage = new EmaySmsMessage();
         smsMessage.setSmsCode(smsCode);
@@ -80,9 +85,9 @@ public class CodeController {
         smsMessage.setAlgorithm(emayConfig.getAlgorithm());
         smsMessage.setEncode(emayConfig.getEncode());
         smsMessage.setHost(emayConfig.getHost());
-//        EmaySmsUtil.sendSingleSms(smsMessage);
-        session.setAttribute("isSendSms",true);
-        return  WebResultModel.ok();
+ //        EmaySmsUtil.sendSingleSms(smsMessage);
+        session.setAttribute("isSendSms", true);
+        return WebResultModel.success();
     }
 
     /**
@@ -108,20 +113,20 @@ public class CodeController {
 
     /**
      * 校验短信验证码
+     *
      * @param mobile
      * @param smsCode
      * @return
      */
     @RequestMapping("/verifySmsCode")
     @ResponseBody
-    public WebResultModel checkSmsCode(String mobile, String  smsCode) {
+    public WebResultModel checkSmsCode(String mobile, String smsCode) {
         String smsCodeCache = stringRedisTemplate.opsForValue().get(mobile);
         WebResultModel resultModel = null;
-        if (smsCode.equals(smsCodeCache)){
-            resultModel  = WebResultModel.ok();
-        }else{
-            resultModel.setCode("0001");
-            resultModel.setMessage("手机验证码错误");
+        if (smsCode.equals(smsCodeCache)) {
+            resultModel = WebResultModel.success();
+        } else {
+            resultModel = WebResultModel.fail("手机验证码错误");
         }
         return resultModel;
     }

@@ -13,13 +13,16 @@
         <div id="header" class="top-back">
             <span class="top-bar-title">设置账号信息</span>
         </div>
-
-        <form method="post" action="" autocomplete="off" >
+        <p></p>
+        <form method="post" action="/user/updateUser.do" autocomplete="off" id="setingForm">
             <div class="weui-cells weui-cells_form">
+                <div class="weui-cell">
+                    <input class="weui-input" type="text"  value="为了提高服务质量,请您填写相关资料。" >
+                </div>
                 <div class="weui-cell">
                     <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
                     <div class="weui-cell__bd">
-                        <input class="weui-input" type="text"  placeholder="请输入姓名">
+                        <input class="weui-input" type="text" name="username" id="username" placeholder="请输入真实姓名">
                     </div>
                 </div>
                 <div class="weui-cell">
@@ -27,41 +30,60 @@
                         <label class="weui-label">身份证号</label>
                     </div>
                     <div class="weui-cell__bd">
-                        <input class="weui-input" type="number" placeholder="身份证号">
+                        <input class="weui-input" type="number" name="certificateNo" id="certificateNo" placeholder="身份证号">
                     </div>
                 </div>
             </div>
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <div class="weui-btn-area">
-                 <input type="submit" value="提交" class="weui-btn weui-btn_warn">
+                 <input type="button" value="提交" class="weui-btn weui-btn_warn" id="submitbtn">
             </div>
         </form>
 
 
 
-        <div class="weui-tabbar">
-            <a href="/loan-application" class="weui-tabbar__item">
-                <div class="weui-tabbar__icon">
-                    <img src="/img/clock.png" alt="">
-                </div>
-                <p class="weui-tabbar__label">贷款申请</p>
-            </a>
-            <a href="/loan/loan-history.do" class="weui-tabbar__item">
-                <div class="weui-tabbar__icon">
-                    <img src="/img/table.png" alt="">
-                </div>
-                <p class="weui-tabbar__label">我的贷款</p>
-            </a>
-            <a href="/account-center" class="weui-tabbar__item">
-                <div class="weui-tabbar__icon">
-                    <img src="/img/people.png" alt="">
-                </div>
-                <p class="weui-tabbar__label">个人中心</p>
-            </a>
-        </div>
+
+        <div th:include="common:: #navibar" th:remove="tag"></div>
 
 <!-- body 最后 -->
 <script src="/js/jquery.min.js"></script>
 <script src="/js/jquery-weui.min.js"></script>
+<script src="/js/app.js"></script>
+<script type="text/javascript" th:inline="javascript">
+    $(function () {
+        var tokenVal = [[${_csrf.token}]];
+        $("#certificateNo").blur(function () {
+            var reg =/(^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2}$)/;
+            if (!reg.test(this.value)){
+                $.toast("请输入正确格式的身份证号", "text");
+                $("#submitbtn").attr("disabled", true);
+            }else{
+                $("#submitbtn").removeAttr("disabled");
+            }
+        })
+
+        $("#username").blur(function () {
+            if(!this.value){
+                $.toast("姓名不能为空", "text");
+                $("#submitbtn").attr("disabled", true);
+            }else{
+                $("#submitbtn").removeAttr("disabled");
+            }
+        })
+
+        $("#submitbtn").click(function () {
+            postByAjax("/user/updateUser.do",$("#setingForm").serialize(),tokenVal,function (data) {
+                if (data.code == '0001') {
+                    $.toast(data.message, "text")
+                } else if (data.code == '0000') {
+                    window.location.href = '/account-manager'
+                }
+            })
+
+
+        })
+
+
+    })
+</script>
 </body>
 </html>

@@ -4,60 +4,44 @@
     <meta charset="UTF-8">
     <title>我的贷款</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-    <link  href="/css/weui.min.css" rel="stylesheet">
-    <link  href="/css/jquery-weui.min.css" rel="stylesheet">
-    <link  href="/css/master.css" rel="stylesheet">
+    <link href="/css/weui.min.css" rel="stylesheet">
+    <link href="/css/jquery-weui.min.css" rel="stylesheet">
+    <link href="/css/master.css" rel="stylesheet">
 </head>
 <body ontouchstart>
 
-        <div id="header" class="top-back">
-            <span class="top-bar-title">我的贷款</span>
+<div id="header" class="top-back">
+    <span class="top-bar-title">我的贷款</span>
+</div>
+<div class="weui-panel weui-panel_access">
+    <div class="weui-panel__hd">
+    </div>
+    <div class="weui-panel__bd">
+        <div th:if="${ #lists.isEmpty(loanHistory)}" th:remove="tag">
+            未查询到数据
         </div>
-
-        <div class="weui-panel weui-panel_access">
-            <div class="weui-panel__bd">
-                <div class="weui-panel weui-panel_access">
-                    <div class="weui-panel__hd"></div>
-                    <div class="weui-panel__bd">
-                        <div th:each="loan,loanStat:${loanHistory}" >
-                            <a th:href="@{/loan/loan-detail.do(contactNo=${loan.contractNo})}" class="weui-cell weui-cell_access weui-cell_link">
-                                <div class="weui-media-box weui-media-box_text">
-                                    <h4 class="weui-media-box__title">合同号: <span th:text="${loan.contractNo}" th:remove="tag"/></h4>
-                                    <p class="weui-media-box__desc">
-                                        <span>贷款金额: <span th:text="${loan.approvedAmount}" th:remove="tag"/></span>
-                                        <span>贷款期限: <span th:text="${loan.approvedTerm}" th:remove="tag"/></span>
-                                    </p>
-                                </div>
-                            </a>
-                        </div>
+        <div th:each="loan,loanStat:${loanHistory}">
+            <div th:if="${loanStat.count != 0 }" th:remove="tag">
+                <a th:href="@{/loan/loan-detail.do(contractNo=${loan.contractNo})}"
+                   class="weui-cell weui-cell_access weui-cell_link">
+                    <div class="weui-media-box weui-media-box_text">
+                        <h4 class="weui-media-box__title" th:if="${loan.contractNo!=null}">
+                            合同号: <span th:text="${loan.contractNo}" th:remove="tag"/></h4>
+                        <h4 class="weui-media-box__title" th:if="${loan.contractNo==null }">
+                            业务号: <span th:text="${loan.businessNo}" th:remove="tag"/></h4>
+                        <p class="weui-media-box__desc">
+                            <span>贷款金额: <span th:text="${loan.amount}" th:remove="tag"/></span>
+                            <span>贷款期限: <span th:text="${loan.terms}" th:remove="tag"/> </span>
+                            <span><span th:text="${loan.unit_cn}" th:remove="tag"/></span>
+                            <span>审批结果: <span th:text="${loan.conclusionInChinese}" th:remove="tag"/></span>
+                        </p>
                     </div>
-                </div>
-            </div>
-            <div class="weui-panel__ft">
+                </a>
             </div>
         </div>
-
-        <div class="weui-tabbar">
-            <a href="/loan-application" class="weui-tabbar__item">
-                <div class="weui-tabbar__icon">
-                    <img src="/img/clock.png" alt="">
-                </div>
-                <p class="weui-tabbar__label">贷款申请</p>
-            </a>
-            <a href="/loan-history" class="weui-tabbar__item">
-                <div class="weui-tabbar__icon">
-                    <img src="/img/table.png" alt="">
-                </div>
-                <p class="weui-tabbar__label">我的贷款</p>
-            </a>
-            <a href="/account-center" class="weui-tabbar__item">
-                <div class="weui-tabbar__icon">
-                    <img src="/img/people.png" alt="">
-                </div>
-                <p class="weui-tabbar__label">个人中心</p>
-            </a>
-        </div>
-
+    </div>
+</div>
+<div th:include="common:: #navibar" th:remove="tag"></div>
 <!-- body 最后 -->
 <script src="/js/jquery.min.js"></script>
 <script src="/js/jquery-weui.min.js"></script>

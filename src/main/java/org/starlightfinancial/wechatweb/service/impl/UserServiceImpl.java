@@ -1,13 +1,16 @@
 package org.starlightfinancial.wechatweb.service.impl;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.starlightfinancial.wechatweb.domain.User;
 import org.starlightfinancial.wechatweb.domain.UserRepository;
 import org.starlightfinancial.wechatweb.service.UserService;
 import org.starlightfinancial.wechatweb.utils.EncryptHelper;
 
+/**
+ * @author senlin.deng
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -16,8 +19,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void saveUser(User user) {
-        userRepository.save(user);
+    public void saveOrUpdateUser(User user) {
+        userRepository.saveAndFlush(user);
     }
 
     @Override
@@ -28,8 +31,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUser(String mobile, String password) {
         String encryptPassword = EncryptHelper.Instance.getEncString(password);
-        if (StringUtils.isEmpty(encryptPassword))
+        if (StringUtils.isEmpty(encryptPassword)) {
             return null;
+        }
         encryptPassword = encryptPassword.trim();
         return userRepository.findByMobileAndPasswordAndIsDelete(mobile, encryptPassword, "0");
 

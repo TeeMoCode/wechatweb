@@ -1,5 +1,8 @@
 package org.starlightfinancial.wechatweb.domain;
 
+/**
+ * @author senlin.deng
+ */
 public class EmaySmsMessage {
 
     private String mobile;
@@ -11,7 +14,7 @@ public class EmaySmsMessage {
     private String host;
     private String algorithm;
     private String encode;
-    private boolean isGizp = false;
+    private boolean isGzip = false;
 
     public String getHeader() {
         return header;
@@ -85,16 +88,16 @@ public class EmaySmsMessage {
         this.encode = encode;
     }
 
-    public boolean isGizp() {
-        return isGizp;
+    public boolean isGzip() {
+        return isGzip;
     }
 
-    public void setGizp(boolean gizp) {
-        isGizp = gizp;
+    public void setGzip(boolean gzip) {
+        isGzip = gzip;
     }
 
-    public String getContent(){
-        return   this.header+this.smsCode+this.tail;
+    public String getContent() {
+        return this.header + this.smsCode + this.tail;
     }
 
 

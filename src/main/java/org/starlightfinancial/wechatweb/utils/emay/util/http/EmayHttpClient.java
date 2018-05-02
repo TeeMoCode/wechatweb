@@ -208,7 +208,7 @@ public class EmayHttpClient {
 	 * @throws IOException
 	 */
 	private void request(HttpURLConnection conn, EmayHttpRequest<?> request) throws IOException {
-		if (request.getMethod().equalsIgnoreCase("POST")) {
+		if ("POST".equalsIgnoreCase(request.getMethod())) {
 			conn.setDoOutput(true);
 			// conn.connect();
 			if (request.getParams() != null) {
@@ -303,15 +303,15 @@ public class EmayHttpClient {
 		if (request.isHttps()) {
 			SSLContext sc = SSLContext.getInstance("SSL");
 			sc.init(null, new TrustManager[] { new X509TrustManager() {
-
+				@Override
 				public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
 
 				}
-
+				@Override
 				public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
 
 				}
-
+				@Override
 				public X509Certificate[] getAcceptedIssuers() {
 					return new X509Certificate[] {};
 				}
@@ -320,7 +320,7 @@ public class EmayHttpClient {
 			HttpsURLConnection sconn = (HttpsURLConnection) console.openConnection();
 			sconn.setSSLSocketFactory(sc.getSocketFactory());
 			sconn.setHostnameVerifier(new HostnameVerifier() {
-
+				@Override
 				public boolean verify(String hostname, SSLSession session) {
 					return true;
 				}

@@ -1,5 +1,5 @@
 <!DOCTYPE html  >
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>贷款申请</title>
@@ -13,91 +13,50 @@
         <div id="header" class="top-back">
             <span class="top-bar-title">贷款申请</span>
         </div>
-
-                <div class="weui-cells">
-                    <div class="weui-cell">
-                        <div class="weui-cell__bd">
-                            <p>当前状态</p>
-                        </div>
-                        <div class="weui-cell__ft">审批通过</div>
-                    </div>
-                    <div class="weui-cell">
-                        <div class="weui-cell__bd">
-                            <p>贷款金额</p>
-                        </div>
-                        <div class="weui-cell__ft">200000</div>
-                    </div>
-                    <div class="weui-cell">
-                        <div class="weui-cell__bd">
-                            <p>贷款期限</p>
-                        </div>
-                        <div class="weui-cell__ft">24个月</div>
-                    </div>
-                </div>
-
-                <div  style="padding: 2px 15px 0px 15px;">
-                    <div  style="color: #cc2c2c;border-top: 1px solid #cc2c2c;padding: 2px 0px 2px 0px;font-size: 16px;">
-                        时间线
+        <p></p>
+        <form method="post" action="" autocomplete="off" >
+            <div class="weui-cells weui-cells_form">
+                <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label"></label></div>
+                    <div class="weui-cell__bd">
+                        <input class="weui-input" type="text"  value="提交信息后,客服人员将会与您联系,为您及时办理贷款" >
                     </div>
                 </div>
                 <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label">需求额度</label></div>
                     <div class="weui-cell__bd">
-                        <p>立项</p>
-                    </div>
-                    <div class="weui-cell__ft">2018-01-10</div>
-                </div>
-                <div class="weui-cell">
-                    <div class="weui-cell__bd">
-                        <p>审批中</p>
-                    </div>
-                    <div class="weui-cell__ft">2018-01-11</div>
-                </div>
-                <div class="weui-cell">
-                    <div class="weui-cell__bd">
-                        <p>审批通过</p>
-                    </div>
-                    <div class="weui-cell__ft">2018-01-13</div>
-                </div>
-                <div  style="padding: 2px 15px 0px 15px;">
-                    <div  style="color: #cc2c2c;border-top: 1px solid #cc2c2c;padding: 2px 0px 2px 0px;font-size: 16px;">
-                        签约资料
+                        <input class="weui-input" type="text" name="demandAmount" placeholder="请输入需求额度">
                     </div>
                 </div>
                 <div class="weui-cell">
+                    <div class="weui-cell__hd">
+                        <label class="weui-label">贷款类型</label>
+                    </div>
                     <div class="weui-cell__bd">
-                        <p> 1.身份证
-                            2.提供放/扣款卡
-                            3.提供王继永征信查询授权书、迪凯汽车配件公司查询授权书； 补沈菊花征信查询授权书并查询征信无不良记录。
-                        </p>
+                        <select class="weui_select" name="select1">
+                            <option selected="" value="1">个人信用贷款</option>
+                            <option value="2">车贷</option>
+                            <option value="3">房产抵押贷款</option>
+                        </select>
                     </div>
                 </div>
                 <div class="weui-cell">
+                    <div class="weui-cell__hd"><label class="weui-label">其他备注</label></div>
                     <div class="weui-cell__bd">
-                        <p> 签约需准备资料中涉及企业的请您携带好对应的企业公章和法人章，涉及流水复核的请您携带好对应卡号的银行卡及U盾</p>
+                        <textarea class="weui-textarea" placeholder="请输入备注" ></textarea>
                     </div>
                 </div>
+            </div>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <div class="weui-btn-area">
+                 <input type="submit" value="提交" class="weui-btn weui-btn_warn">
+            </div>
+        </form>
 
 
-        <div class="weui-tabbar">
-            <a href="/loan-application" class="weui-tabbar__item">
-                <div class="weui-tabbar__icon">
-                    <img src="/img/clock.png" alt="">
-                </div>
-                <p class="weui-tabbar__label">贷款申请</p>
-            </a>
-            <a href="/loan/loan-history.do" class="weui-tabbar__item">
-                <div class="weui-tabbar__icon">
-                    <img src="/img/table.png" alt="">
-                </div>
-                <p class="weui-tabbar__label">我的贷款</p>
-            </a>
-            <a href="/account-center" class="weui-tabbar__item">
-                <div class="weui-tabbar__icon">
-                    <img src="/img/people.png" alt="">
-                </div>
-                <p class="weui-tabbar__label">个人中心</p>
-            </a>
-        </div>
+
+
+        <div th:include="common:: #navibar" th:remove="tag"></div>
 
 <!-- body 最后 -->
 <script src="/js/jquery.min.js"></script>
