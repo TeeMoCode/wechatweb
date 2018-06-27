@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers( "/user/login.do","/register","/register-detail","/code/**","/user/register.do",
                 "/user/isValid.do","/reset-password","/reset-password-detail","/user/resetPassword.do","/css/*", "/img/**", "/font/*", "/js/*").permitAll()
                 .anyRequest().authenticated().and().apply(openIdLoginAuthenticationSecurityConfig)
-                .and().formLogin().loginPage("/login").successHandler(customAuthenticationSuccessHandler).failureUrl("/login?error").permitAll().and()
+                .and().formLogin().loginPage("/login").successHandler(customAuthenticationSuccessHandler).failureUrl("/login?error=1").permitAll().and()
                 .logout().permitAll();
 
     }

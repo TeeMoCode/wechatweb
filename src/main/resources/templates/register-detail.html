@@ -44,6 +44,7 @@
             </div>
         </div>
     </div>
+    <div class="weui-btn-area">
         <input type="button" value="注册"  id="submitbtn" class="weui-btn weui-btn_primary">
     </div>
 </form>
@@ -77,7 +78,7 @@
                         $.toast(data.message, "text");
                     }else if (data.code =='0000'){
                         $.toast("注册成功", "text");
-                        setTimeout("window.location.href = '/login'",2000);
+                        setTimeout("window.location.href = '/'",2000);
                     }
                 })
             }

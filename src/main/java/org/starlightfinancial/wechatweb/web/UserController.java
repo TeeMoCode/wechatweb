@@ -2,9 +2,13 @@ package org.starlightfinancial.wechatweb.web;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,6 +32,8 @@ import java.util.regex.Pattern;
 @RequestMapping("/user")
 public class UserController {
 
+    @Autowired
+    private AuthenticationProvider authenticationProvider;
 
     @Autowired
     private UserService userService;
@@ -72,7 +78,7 @@ public class UserController {
      */
     @RequestMapping("/register.do")
     @ResponseBody
-    public WebResultModel register(String mobile, String password, String openId, HttpSession session) {
+    public WebResultModel register(String mobile, String password, String openId, HttpSession session, HttpServletRequest request) {
         WebResultModel resultModel = null;
         //避免直接被请求到进行了注册
         Boolean isSendSms = (Boolean) session.getAttribute("isSendSms");
@@ -86,6 +92,13 @@ public class UserController {
             user.setIsDelete("0");
             user.setOpenId((String) session.getAttribute("openId"));
             userService.saveOrUpdateUser(user);
+
+            //注册成功后将用户信息交由SecurityContextHolder管理
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user.getMobile(), password);
+            usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetails(request));
+            Authentication authenticate = authenticationProvider.authenticate(usernamePasswordAuthenticationToken);
+            SecurityContextHolder.getContext().setAuthentication(authenticate);
+            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
             resultModel = WebResultModel.success();
         } else {
             resultModel = WebResultModel.fail("请不要刷新本页面或重复提交表单！");
@@ -117,7 +130,7 @@ public class UserController {
             } else {
                 User user = userService.findByMobile(mobile);
                 if (user != null) {
-                    resultModel = WebResultModel.fail("此手机号已注册,请重新输入",1);
+                    resultModel = WebResultModel.fail("此手机号已注册,请重新输入", 1);
                 } else {
                     resultModel = WebResultModel.success();
                 }
@@ -144,7 +157,7 @@ public class UserController {
             userService.saveOrUpdateUser(currentUser);
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/login?logout";
+        return "redirect:/login?logout=1";
 
     }
 
@@ -178,7 +191,6 @@ public class UserController {
     }
 
 
-
     /**
      * 重置密码
      *
@@ -205,7 +217,6 @@ public class UserController {
         }
         return resultModel;
     }
-
 
 
 }

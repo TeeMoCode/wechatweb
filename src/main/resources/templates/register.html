@@ -45,7 +45,8 @@
             </div>
         </div>
     </div>
-    <input type="button" value="提交" id="submitbtn" class="weui-btn weui-btn_primary">
+    <div class="weui-btn-area">
+        <input type="button" value="提交" id="submitbtn" class="weui-btn weui-btn_primary">
     </div>
 </form>
 
@@ -108,7 +109,7 @@
                     }
                 })
                 time($("#smsCodeBtn"))
-            }else{
+            } else {
                 $.toast("手机号不能为空", "text");
             }
 

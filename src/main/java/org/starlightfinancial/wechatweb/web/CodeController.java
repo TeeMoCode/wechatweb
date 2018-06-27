@@ -14,7 +14,6 @@ import org.starlightfinancial.wechatweb.domain.EmaySmsMessage;
 import org.starlightfinancial.wechatweb.enums.ConstantsEnum;
 import org.starlightfinancial.wechatweb.utils.CheckCodeGenerator;
 import org.starlightfinancial.wechatweb.utils.WebResultModel;
-import org.starlightfinancial.wechatweb.utils.emay.EmaySmsUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -87,7 +86,8 @@ public class CodeController {
         smsMessage.setAlgorithm(emayConfig.getAlgorithm());
         smsMessage.setEncode(emayConfig.getEncode());
         smsMessage.setHost(emayConfig.getHost());
-         EmaySmsUtil.sendSingleSms(smsMessage);
+        System.out.println(smsCode);
+//        EmaySmsUtil.sendSingleSms(smsMessage);
         session.setAttribute("isSendSms", true);
         return WebResultModel.success();
     }
