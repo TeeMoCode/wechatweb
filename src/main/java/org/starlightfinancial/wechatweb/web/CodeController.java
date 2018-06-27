@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.starlightfinancial.wechatweb.EmayConfig;
 import org.starlightfinancial.wechatweb.domain.EmaySmsMessage;
+import org.starlightfinancial.wechatweb.enums.ConstantsEnum;
 import org.starlightfinancial.wechatweb.utils.CheckCodeGenerator;
 import org.starlightfinancial.wechatweb.utils.WebResultModel;
+import org.starlightfinancial.wechatweb.utils.emay.EmaySmsUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -85,7 +87,7 @@ public class CodeController {
         smsMessage.setAlgorithm(emayConfig.getAlgorithm());
         smsMessage.setEncode(emayConfig.getEncode());
         smsMessage.setHost(emayConfig.getHost());
- //        EmaySmsUtil.sendSingleSms(smsMessage);
+         EmaySmsUtil.sendSingleSms(smsMessage);
         session.setAttribute("isSendSms", true);
         return WebResultModel.success();
     }
@@ -103,9 +105,9 @@ public class CodeController {
         String checkCodeOnServer = (String) session.getAttribute("checkCode");
         WebResultModel resultModel = new WebResultModel();
         if (checkCode.equalsIgnoreCase(checkCodeOnServer)) {
-            resultModel.setCode("0000");
+            resultModel.setCode(ConstantsEnum.REQUESTSUCCESS.getCode());
         } else {
-            resultModel.setCode("0001");
+            resultModel.setCode(ConstantsEnum.REQUESTFAIL.getCode());
             resultModel.setMessage("图形验证码输入错误,请重新输入");
         }
         return resultModel;

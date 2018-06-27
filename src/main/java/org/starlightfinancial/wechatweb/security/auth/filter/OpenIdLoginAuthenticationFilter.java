@@ -38,8 +38,9 @@ public class OpenIdLoginAuthenticationFilter extends AbstractAuthenticationProce
         request.getSession().setAttribute("openId", openId);
 
         //assemble token
-//        OpenIdLoginAuthenticationToken authRequest = new OpenIdLoginAuthenticationToken(openId);
-        OpenIdLoginAuthenticationToken authRequest = new OpenIdLoginAuthenticationToken("1234567891");
+        OpenIdLoginAuthenticationToken authRequest = new OpenIdLoginAuthenticationToken(openId);
+//        1234567891 for test
+//        OpenIdLoginAuthenticationToken authRequest = new OpenIdLoginAuthenticationToken("1234567891");
 
         // Allow subclasses to set the "details" property
         setDetails(request, authRequest);

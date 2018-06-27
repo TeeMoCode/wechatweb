@@ -1,0 +1,5 @@
+2018-06-27 13:47:53.063 |-DEBUG [restartedMain] org.starlightfinancial.wechatweb.WechatwebApplication [51] -| Running with Spring Boot v1.5.10.RELEASE, Spring v4.3.14.RELEASE
+2018-06-27 13:48:01.891 |-DEBUG [restartedMain] org.starlightfinancial.wechatweb.WechatwebApplication [51] -| Running with Spring Boot v1.5.10.RELEASE, Spring v4.3.14.RELEASE
+2018-06-27 13:48:29.889 |-DEBUG [http-nio-8080-exec-7] org.starlightfinancial.wechatweb.security.auth.handler.CustomAuthenticationSuccessHandler [98] -| Redirecting to DefaultSavedRequest Url: http://localhost:8080/
+2018-06-27 13:53:13.931 |-DEBUG [http-nio-8080-exec-3] org.starlightfinancial.wechatweb.security.auth.handler.CustomAuthenticationSuccessHandler [123] -| Using default Url: /
+2018-06-27 13:59:42.586 |-DEBUG [http-nio-8080-exec-5] org.starlightfinancial.wechatweb.security.auth.handler.CustomAuthenticationSuccessHandler [123] -| Using default Url: /

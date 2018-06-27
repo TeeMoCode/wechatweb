@@ -1,0 +1,10 @@
+2018-06-27 13:47:53.054 |-INFO  [restartedMain] org.starlightfinancial.wechatweb.WechatwebApplication [48] -| Starting WechatwebApplication on cqrtdt217 with PID 14512 (E:\project\wechatweb\target\classes started by senlin.deng in E:\project\wechatweb)
+2018-06-27 13:47:53.069 |-INFO  [restartedMain] org.starlightfinancial.wechatweb.WechatwebApplication [597] -| The following profiles are active: prod
+2018-06-27 13:48:01.888 |-INFO  [restartedMain] org.starlightfinancial.wechatweb.WechatwebApplication [48] -| Starting WechatwebApplication on cqrtdt217 with PID 11244 (E:\project\wechatweb\target\classes started by senlin.deng in E:\project\wechatweb)
+2018-06-27 13:48:01.891 |-INFO  [restartedMain] org.starlightfinancial.wechatweb.WechatwebApplication [597] -| The following profiles are active: dev
+2018-06-27 13:48:06.398 |-INFO  [restartedMain] org.starlightfinancial.wechatweb.security.auth.handler.CustomAuthenticationSuccessHandler [33] -| CustomAuthenticationSuccessHandler loading ...
+2018-06-27 13:48:06.409 |-INFO  [restartedMain] org.starlightfinancial.wechatweb.security.auth.handler.CustomAuthenticationFailureHandler [26] -| CustomAuthenticationFailureHandler loading ...
+2018-06-27 13:48:10.388 |-INFO  [restartedMain] org.starlightfinancial.wechatweb.WechatwebApplication [57] -| Started WechatwebApplication in 8.754 seconds (JVM running for 9.646)
+2018-06-27 13:48:29.890 |-INFO  [http-nio-8080-exec-7] org.starlightfinancial.wechatweb.security.auth.handler.CustomAuthenticationSuccessHandler [44] -| 认证通过,17784319480
+2018-06-27 13:53:13.932 |-INFO  [http-nio-8080-exec-3] org.starlightfinancial.wechatweb.security.auth.handler.CustomAuthenticationSuccessHandler [44] -| 认证通过,17784319480
+2018-06-27 13:59:44.300 |-INFO  [http-nio-8080-exec-5] org.starlightfinancial.wechatweb.security.auth.handler.CustomAuthenticationSuccessHandler [44] -| 认证通过,17784319480

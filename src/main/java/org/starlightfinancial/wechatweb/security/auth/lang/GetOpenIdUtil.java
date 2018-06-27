@@ -4,6 +4,7 @@ package org.starlightfinancial.wechatweb.security.auth.lang;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.starlightfinancial.wechatweb.utils.HttpClientUtil;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -42,19 +43,18 @@ public class GetOpenIdUtil {
         jsonObject.put("code", code);
         jsonObject.put("grant_type", grant_type);
         String requestData = jsonObject.toString();
-//        String resultStr = HttpClientUtil.post(url, requestData);
-//        JSONObject resultData = JSONObject.parseObject(resultStr);
-//        System.out.println("微信授权服务器返回的信息"+resultData);
-//        Integer errcode = resultData.getIntValue("errcode");
-//        if (errcode != null && errcode > 0){
-//            logger.error("获取openId异常,异常码:"+errcode+",异常信息:"+resultData.getString("errmsg"));
-//            return  null;
-//        }else {
-//            String openid = resultData.getString("openid");
-//            return openid;
-//        }
+        String resultStr = HttpClientUtil.post(url, requestData);
+        JSONObject resultData = JSONObject.parseObject(resultStr);
+        System.out.println("微信授权服务器返回的信息"+resultData);
+        Integer errcode = resultData.getIntValue("errcode");
+        if (errcode != null && errcode > 0){
+            logger.error("获取openId异常,异常码:"+errcode+",异常信息:"+resultData.getString("errmsg"));
+            return  null;
+        }else {
+            String openid = resultData.getString("openid");
+            return openid;
+        }
 
-        return null;
     }
 
 

@@ -41,8 +41,8 @@ public class LoanController {
         ArrayList<BasicNameValuePair> basicNameValuePairs = new ArrayList<>();
         basicNameValuePairs.add(new BasicNameValuePair("idNumber", currentUser.getCertificateNo()));
         basicNameValuePairs.add(new BasicNameValuePair("name", currentUser.getUsername()));
-//        String resultStr = HttpClientUtil.post(historyUrl, basicNameValuePairs);
-        String resultStr = HttpClientUtil.post("http://localhost:8080/myloan", basicNameValuePairs);
+        String resultStr = HttpClientUtil.post(historyUrl, basicNameValuePairs);
+//        String resultStr = HttpClientUtil.post("http://localhost:8080/myloan", basicNameValuePairs);
         logger.info("查询贷款记录返回数据" + resultStr);
         JSONObject jsonObject = JSONObject.parseObject(resultStr);
         List<Loan> loans = null;
@@ -58,8 +58,8 @@ public class LoanController {
         // TODO: 2018/2/26 根据合同编号查询贷款具体信息
         ArrayList<BasicNameValuePair> basicNameValuePairs = new ArrayList<>();
         basicNameValuePairs.add(new BasicNameValuePair("contractNo", contractNo));
-//        String resultStr = HttpClientUtil.post(detailUrl, basicNameValuePairs);
-        String resultStr = HttpClientUtil.post("http://localhost:8080/myloandetail", basicNameValuePairs);
+        String resultStr = HttpClientUtil.post(detailUrl, basicNameValuePairs);
+//        String resultStr = HttpClientUtil.post("http://localhost:8080/myloandetail", basicNameValuePairs);
         logger.info("查询贷款详细信息返回数据" + resultStr);
         JSONObject jsonObject = JSONObject.parseObject(resultStr);
         Loan loan = null;
@@ -77,8 +77,8 @@ public class LoanController {
         ArrayList<BasicNameValuePair> basicNameValuePairs = new ArrayList<>();
         basicNameValuePairs.add(new BasicNameValuePair("idNumber", currentUser.getCertificateNo()));
         basicNameValuePairs.add(new BasicNameValuePair("name", currentUser.getUsername()));
-//         String resultStr = HttpClientUtil.post(progressUrl, basicNameValuePairs);
-        String resultStr = HttpClientUtil.post("http://localhost:8080/myapplication", basicNameValuePairs);
+         String resultStr = HttpClientUtil.post(progressUrl, basicNameValuePairs);
+//        String resultStr = HttpClientUtil.post("http://localhost:8080/myapplication", basicNameValuePairs);
         logger.info("查询贷款详细信息返回数据" + resultStr);
         JSONObject jsonObject = JSONObject.parseObject(resultStr);
         Application application = null;
