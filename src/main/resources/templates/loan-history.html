@@ -17,7 +17,7 @@
     <div class="weui-panel__hd">
     </div>
     <div class="weui-panel__bd">
-        <div th:if="${ #lists.isEmpty(loanHistory)}" th:remove="tag">
+        <div th:if="${ #lists.isEmpty(loanHistory)}" class="weui-cells">
             未查询到数据
         </div>
         <div th:each="loan,loanStat:${loanHistory}">

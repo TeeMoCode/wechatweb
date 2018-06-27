@@ -55,12 +55,8 @@
                 <div class="weui-cell__ft" th:text="${loan.status}"></div>
             </div>
         </div>
-        <div class="weui-cells" th:if="${loan == null}">
-            <div class="weui-cell">
-                <div class="weui-cell__bd">
-                    未查询到数据
-                </div>
-            </div>
+        <div class="weui-cells" th:if="${loan == null}" >
+            未查询到数据
         </div>
     </div>
     <div class="weui-panel__ft">
