@@ -33,8 +33,10 @@
                 </div>
                 <div class="weui-cell__ft" th:text="${session.SPRING_SECURITY_CONTEXT.authentication.principal.mobile}"></div>
             </div>
-            <a href="/account-setting" class="weui-btn weui-btn_warn">设置账号信息</a>
-            <a href="/user/logout.do" class="weui-btn weui-btn_warn">退出登录</a>
+            <div class="weui-btn-area">
+                <a href="/account-setting" class="weui-btn weui-btn_warn">设置账号信息</a>
+                <a href="/user/logout.do" class="weui-btn weui-btn_warn">退出登录</a>
+            </div>
         </div>
 
 
