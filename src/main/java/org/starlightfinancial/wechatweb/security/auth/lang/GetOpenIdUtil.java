@@ -16,19 +16,21 @@ public class GetOpenIdUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(GetOpenIdUtil.class);
 
-    private static String appid;
-    private static String secret;
-    private static String grant_type;
     private static String url;
 
     static {
         Properties properties = new Properties();
         try {
             properties.load(GetOpenIdUtil.class.getClassLoader().getResourceAsStream("weixin.properties"));
-            appid = properties.getProperty("appid");
-            secret = properties.getProperty("secret");
-            grant_type = properties.getProperty("grant_type");
-            url = properties.getProperty("url");
+            StringBuilder urlBuilder = new StringBuilder(properties.getProperty("url"));
+            urlBuilder.append("?appid=").append(properties.getProperty("appid"))
+                    .append("&secret=").append(properties.getProperty("secret"))
+                    .append("&code=%s")
+                    .append("&grant_type=authorization_code");
+            // 组成请求地址
+            // https://api.weixin.qq.com/sns/oauth2/access_token?appid=APPID&secret=SECRET&code=s%&grant_type=authorization_code
+            url = urlBuilder.toString();
+            logger.info("加载微信公众号配置成功");
         } catch (IOException e) {
             e.printStackTrace();
             logger.error("加载微信公众号配置失败", e.getMessage());
@@ -37,13 +39,7 @@ public class GetOpenIdUtil {
 
 
     public static String getOpenId(String code) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("appid", appid);
-        jsonObject.put("secret", secret);
-        jsonObject.put("code", code);
-        jsonObject.put("grant_type", grant_type);
-        String requestData = jsonObject.toString();
-        String resultStr = HttpClientUtil.post(url, requestData);
+        String resultStr = HttpClientUtil.get(String.format(url,code));
         JSONObject resultData = JSONObject.parseObject(resultStr);
         System.out.println("微信授权服务器返回的信息"+resultData);
         Integer errcode = resultData.getIntValue("errcode");

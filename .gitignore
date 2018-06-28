@@ -25,3 +25,4 @@ nbdist/
 
 *.properties
 log/
+*.txt
