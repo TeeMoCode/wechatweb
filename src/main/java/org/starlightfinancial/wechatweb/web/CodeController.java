@@ -36,6 +36,8 @@ public class CodeController {
     @Autowired
     private EmayConfig emayConfig;
 
+    private static final String LIMIT_PREFIX="send_count_";
+
     /**
      * 返回图形验证码
      *
@@ -64,9 +66,21 @@ public class CodeController {
     @RequestMapping("/getSmsCode")
     @ResponseBody
     public WebResultModel getSmsCode(String mobile, HttpSession session) throws Exception {
-        if (StringUtils.isEmpty(mobile)){
+        if (StringUtils.isEmpty(mobile)) {
             return WebResultModel.fail("手机号码不能为空");
         }
+        //增加同一手机号单日次数限制为5次
+        String  limitName= LIMIT_PREFIX + mobile;
+        String countStr = stringRedisTemplate.opsForValue().get(limitName);
+        if (StringUtils.isBlank(countStr)){
+            countStr = "0";
+            stringRedisTemplate.opsForValue().set(limitName,countStr,24,TimeUnit.HOURS);
+        }
+        Integer count = Integer.valueOf(countStr);
+        if(++count >5){
+            return WebResultModel.fail("短信当日发送次数超限,请明天再尝试");
+        }
+
         String smsCode = stringRedisTemplate.opsForValue().get(mobile);
         Long expire = 0L;
         //获得过期时间
@@ -89,6 +103,7 @@ public class CodeController {
         smsMessage.setHost(emayConfig.getHost());
         EmaySmsUtil.sendSingleSms(smsMessage);
         session.setAttribute("isSendSms", true);
+        stringRedisTemplate.opsForValue().set(limitName,String.valueOf(count) ,24,TimeUnit.HOURS);
         return WebResultModel.success();
     }
 
